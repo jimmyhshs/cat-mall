@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     :root {
       --bg-dark: #060F24;
@@ -54,7 +55,6 @@
       padding: 0 24px;
     }
 
-    /* Top Announcement Bar */
     .top-bar {
       background: linear-gradient(90deg, #091633 0%, #1E3A8A 50%, #091633 100%);
       border-bottom: 1px solid var(--border-gold);
@@ -66,7 +66,6 @@
     }
     .top-bar strong { color: var(--gold-light); font-weight: 700; }
 
-    /* Header */
     header {
       position: sticky;
       top: 0;
@@ -132,7 +131,7 @@
     }
     .nav-links a:hover::after { width: 100%; }
 
-    .nav-actions { display: flex; align-items: center; gap: 10px; }
+    .nav-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
     .member-pill {
       display: flex;
       align-items: center;
@@ -213,7 +212,6 @@
       justify-content: center;
     }
 
-    /* Hero Slider Section */
     .hero-section {
       position: relative;
       height: 620px;
@@ -368,7 +366,6 @@
       transition: width 0.1s linear;
     }
 
-    /* Trust Strip */
     .trust-strip {
       background: #08132B;
       border-bottom: 1px solid var(--border-subtle);
@@ -392,7 +389,6 @@
     .trust-item strong { display: block; font-size: 0.88rem; color: #fff; }
     .trust-item span { font-size: 0.77rem; color: var(--text-muted); }
 
-    /* Section Common */
     section { padding: 80px 0; }
     .section-head {
       display: flex;
@@ -418,7 +414,6 @@
     }
     .section-sub { color: var(--text-muted); font-size: 0.96rem; margin-top: 6px; }
 
-    /* Editorial Curation */
     .curation-section {
       background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-navy) 100%);
     }
@@ -476,7 +471,6 @@
     }
     .curation-card:hover .curation-media img { transform: scale(1.06); }
 
-    /* Product Catalog */
     .filter-bar {
       display: flex;
       align-items: center;
@@ -634,7 +628,6 @@
       transition: var(--transition);
     }
 
-    /* Membership Tiers Section */
     .membership-section {
       background: radial-gradient(circle at 50% 0%, #17347A 0%, #091530 60%, #060F24 100%);
       border-top: 1px solid var(--border-subtle);
@@ -674,7 +667,6 @@
     }
     .tier-benefits li::before { content: '✓'; color: var(--emerald); font-weight: 700; margin-right: 8px; }
 
-    /* Footer */
     footer {
       background: #040A18;
       border-top: 1px solid var(--border-subtle);
@@ -700,7 +692,6 @@
       font-size: 0.8rem;
     }
 
-    /* Cart Drawer */
     .drawer-backdrop {
       position: fixed;
       inset: 0;
@@ -811,7 +802,6 @@
       margin-bottom: 16px;
     }
 
-    /* Modals */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -905,23 +895,7 @@
       padding: 14px;
       margin-bottom: 16px;
     }
-    .demo-accounts {
-      margin-top: 18px;
-      padding-top: 16px;
-      border-top: 1px dashed var(--border-subtle);
-    }
-    .demo-btns { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
-    .demo-btn {
-      padding: 6px 11px;
-      border-radius: 8px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      font-size: 0.76rem;
-      color: var(--cyan);
-    }
-    .demo-btn:hover { border-color: var(--gold-light); color: var(--gold-light); }
 
-    /* Toast */
     .toast-container {
       position: fixed;
       bottom: 24px;
@@ -974,12 +948,10 @@
 </head>
 <body>
 
-  <!-- Top Promo Banner -->
   <div class="top-bar">
     👑 신규 회원가입 시 즉시 <strong>3,000P 축하 적립금</strong> 지급 · 등급별 최대 <strong>10% 로열 포인트</strong> 적립
   </div>
 
-  <!-- Navigation Header -->
   <header>
     <div class="container nav-wrap">
       <a href="#" class="logo">
@@ -1000,7 +972,6 @@
     </div>
   </header>
 
-  <!-- Hero Image Slider (4 Slides) -->
   <section class="hero-section" id="heroSection">
     <div class="hero-slides" id="heroSlides"></div>
     <button class="hero-arrow hero-prev" onclick="changeSlide(-1)" aria-label="이전 슬라이드">❮</button>
@@ -1016,7 +987,6 @@
     </div>
   </section>
 
-  <!-- Brand Value Strip -->
   <div class="trust-strip">
     <div class="container trust-grid">
       <div class="trust-item">
@@ -1050,7 +1020,6 @@
     </div>
   </div>
 
-  <!-- Editorial Curation -->
   <section class="curation-section" id="curation">
     <div class="container">
       <div class="section-head">
@@ -1109,7 +1078,6 @@
     </div>
   </section>
 
-  <!-- Full Product Catalog -->
   <section id="catalog">
     <div class="container">
       <div class="section-head">
@@ -1122,7 +1090,7 @@
 
       <div class="filter-bar">
         <div class="filter-tabs" id="filterTabs">
-          <button class="filter-tab active" data-cat="all" onclick="setCategory('all')">전체 상품 (8)</button>
+          <button class="filter-tab active" data-cat="all" onclick="setCategory('all')">전체 상품</button>
           <button class="filter-tab" data-cat="tower" onclick="setCategory('tower')">🏰 캣타워 · 캣폴</button>
           <button class="filter-tab" data-cat="treats" onclick="setCategory('treats')">🍣 프리미엄 간식</button>
           <button class="filter-tab" data-cat="living" onclick="setCategory('living')">🛋️ 리빙 · 장난감</button>
@@ -1142,7 +1110,6 @@
     </div>
   </section>
 
-  <!-- Membership Tiers & Point System -->
   <section class="membership-section" id="membership">
     <div class="container">
       <div class="section-head">
@@ -1155,9 +1122,9 @@
       </div>
 
       <div class="tier-grid" id="tierGrid">
-        <div class="tier-card" data-tier="kitten">
+        <div class="tier-card" data-tier="WELCOME">
           <div class="tier-icon">🐾</div>
-          <div class="tier-name">아기고양이 (Kitten)</div>
+          <div class="tier-name">아기고양이 (WELCOME)</div>
           <div class="tier-cond">신규 회원가입 즉시 부여</div>
           <div class="tier-rate">2% <span>포인트 적립</span></div>
           <ul class="tier-benefits">
@@ -1167,9 +1134,9 @@
           </ul>
         </div>
 
-        <div class="tier-card" data-tier="silver">
+        <div class="tier-card" data-tier="SILVER">
           <div class="tier-icon">🥈</div>
-          <div class="tier-name">실버캣 (Silver Cat)</div>
+          <div class="tier-name">실버캣 (SILVER)</div>
           <div class="tier-cond">누적 구매 100,000원 이상</div>
           <div class="tier-rate">4% <span>포인트 적립</span></div>
           <ul class="tier-benefits">
@@ -1179,9 +1146,9 @@
           </ul>
         </div>
 
-        <div class="tier-card featured" data-tier="royal">
+        <div class="tier-card featured" data-tier="GOLD">
           <div class="tier-icon">👑</div>
-          <div class="tier-name">로열캣 (Royal Cat)</div>
+          <div class="tier-name">로열캣 (GOLD)</div>
           <div class="tier-cond">누적 구매 300,000원 이상</div>
           <div class="tier-rate">7% <span>포인트 적립</span></div>
           <ul class="tier-benefits">
@@ -1191,9 +1158,9 @@
           </ul>
         </div>
 
-        <div class="tier-card" data-tier="emperor">
+        <div class="tier-card" data-tier="VIP">
           <div class="tier-icon">💎</div>
-          <div class="tier-name">엠퍼러캣 (Emperor Cat)</div>
+          <div class="tier-name">엠퍼러캣 (VIP)</div>
           <div class="tier-cond">누적 구매 600,000원 이상</div>
           <div class="tier-rate">10% <span>포인트 적립</span></div>
           <ul class="tier-benefits">
@@ -1206,7 +1173,6 @@
     </div>
   </section>
 
-  <!-- Footer -->
   <footer>
     <div class="container">
       <div class="footer-grid">
@@ -1247,12 +1213,11 @@
       </div>
       <div class="footer-bottom">
         <span>© 2026 ROYAL PAW Inc. All rights reserved.</span>
-        <span>GitHub Pages Ready · Relative Assets: <code>img/</code></span>
+        <span>Supabase Connected · Relative Assets: <code>img/</code></span>
       </div>
     </div>
   </footer>
 
-  <!-- Shopping Cart Drawer -->
   <div class="drawer-backdrop" id="drawerBackdrop" onclick="closeCart()"></div>
   <aside class="cart-drawer" id="cartDrawer">
     <div class="drawer-header">
@@ -1284,7 +1249,6 @@
     </div>
   </aside>
 
-  <!-- Auth Modal -->
   <div class="modal-overlay" id="authModal">
     <div class="modal-box">
       <div class="modal-head">
@@ -1315,6 +1279,10 @@
           <input type="text" class="form-input" id="signupName" placeholder="예: 김집사" required />
         </div>
         <div class="form-group">
+          <label>연락처</label>
+          <input type="tel" class="form-input" id="signupPhone" placeholder="010-1234-5678" required />
+        </div>
+        <div class="form-group">
           <label>반려묘 이름 (맞춤 케어 등록)</label>
           <input type="text" class="form-input" id="signupCatName" placeholder="예: 치즈 / 루나" required />
         </div>
@@ -1324,25 +1292,15 @@
         </div>
         <div class="form-group">
           <label>비밀번호</label>
-          <input type="password" class="form-input" id="signupPw" placeholder="4자 이상 입력" minlength="4" required />
+          <input type="password" class="form-input" id="signupPw" placeholder="6자 이상 입력" minlength="6" required />
         </div>
         <button type="submit" class="btn-nav btn-gold" style="width:100%; padding:13px; margin-top:6px;">
           가입 완료하고 3,000P 즉시 받기
         </button>
       </form>
-
-      <div class="demo-accounts">
-        <div style="font-size:0.78rem; color:var(--text-muted);">⚡ 등급별 포인트 시스템 빠른 체험 (원클릭 로그인)</div>
-        <div class="demo-btns">
-          <button type="button" class="demo-btn" onclick="quickDemoLogin('kitten')">🐾 아기고양이 (2% · 3,000P)</button>
-          <button type="button" class="demo-btn" onclick="quickDemoLogin('royal')">👑 로열캣 (7% · 18,500P)</button>
-          <button type="button" class="demo-btn" onclick="quickDemoLogin('emperor')">💎 엠퍼러캣 (10% · 45,000P)</button>
-        </div>
-      </div>
     </div>
   </div>
 
-  <!-- Checkout & Payment Modal -->
   <div class="modal-overlay" id="checkoutModal">
     <div class="modal-box" style="max-width:580px;">
       <div class="modal-head">
@@ -1393,20 +1351,21 @@
     </div>
   </div>
 
-  <!-- Product Detail Modal -->
   <div class="modal-overlay" id="productModal">
     <div class="modal-box" style="max-width:660px;" id="productModalContent"></div>
   </div>
 
-  <!-- My Page Modal -->
   <div class="modal-overlay" id="mypageModal">
     <div class="modal-box" style="max-width:620px;" id="mypageContent"></div>
   </div>
 
-  <!-- Toast Container -->
   <div class="toast-container" id="toastContainer"></div>
 
   <script>
+    const SUPABASE_URL = 'https://mqpupnfyirddngtbeviw.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_TfdLuR8tkmpnkUXPXNIl4A_N5AoSfT-';
+    const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
     const HERO_SLIDES = [
       {
         tag: "ROYAL ARCHITECTURE · 2026 NEW",
@@ -1447,13 +1406,13 @@
     ];
 
     const TIERS = [
-      { id: "kitten", name: "아기고양이", icon: "🐾", minSpend: 0, rate: 0.02, freeShipMin: 50000 },
-      { id: "silver", name: "실버캣", icon: "🥈", minSpend: 100000, rate: 0.04, freeShipMin: 30000 },
-      { id: "royal", name: "로열캣", icon: "👑", minSpend: 300000, rate: 0.07, freeShipMin: 0 },
-      { id: "emperor", name: "엠퍼러캣", icon: "💎", minSpend: 600000, rate: 0.10, freeShipMin: 0 }
+      { id: "WELCOME", name: "아기고양이", icon: "🐾", minSpend: 0, rate: 0.02, freeShipMin: 50000 },
+      { id: "SILVER", name: "실버캣", icon: "🥈", minSpend: 100000, rate: 0.04, freeShipMin: 30000 },
+      { id: "GOLD", name: "로열캣", icon: "👑", minSpend: 300000, rate: 0.07, freeShipMin: 0 },
+      { id: "VIP", name: "엠퍼러캣", icon: "💎", minSpend: 600000, rate: 0.10, freeShipMin: 0 }
     ];
 
-    const PRODUCTS = [
+    const FALLBACK_PRODUCTS = [
       {
         id: 1,
         name: "로열 아키텍트 5단 원목 캣타워",
@@ -1462,7 +1421,7 @@
         badge: "BEST",
         price: 289000,
         origPrice: 340000,
-        img: "img/prod-tower.jpg",
+        img: "img/hero-1.jpg",
         desc: "고밀도 자작나무 합판 & 투명 아크릴 해먹이 결합된 플래그십 5단 캣타워",
         detail: "높이 172cm, 하중 25kg까지 안정적으로 지지하는 저중심 설계 캣타워입니다. 분리 세탁 가능한 로열 블루 벨벳 방석이 기본 포함됩니다."
       },
@@ -1474,7 +1433,7 @@
         badge: "인기 1위",
         price: 18900,
         origPrice: 23000,
-        img: "img/prod-salmon.jpg",
+        img: "img/hero-2.jpg",
         desc: "첨가물 0% 휴먼그레이드 노르웨이산 생연어 100% 큐브 트릿",
         detail: "생연어 필렛을 영하 40도에서 동결건조하여 피모 윤기와 오메가3 보충에 탁월합니다. 물에 불려 급여하면 음수량 증가에도 도움을 줍니다."
       },
@@ -1486,7 +1445,7 @@
         badge: "NEW",
         price: 68000,
         origPrice: 82000,
-        img: "img/prod-bed.jpg",
+        img: "img/hero-3.jpg",
         desc: "고밀도 메모리폼과 발수 로열블루 벨벳으로 완성한 숙면 방석",
         detail: "관절 부담을 줄여주는 인체공학적 볼스터 쿠션과 골드 파이핑 디테일이 돋보이는 럭셔리 캣베드입니다."
       },
@@ -1498,7 +1457,7 @@
         badge: "재구매율 94%",
         price: 21500,
         origPrice: 26000,
-        img: "img/prod-puree.jpg",
+        img: "img/hero-2.jpg",
         desc: "무항생제 국내산 닭가슴살과 유기농 캣닢을 블렌딩한 고단백 짜먹는 간식",
         detail: "나트륨 함량을 최소화하고 타우린과 프락토올리고당을 더해 매일 급여해도 부담 없는 데일리 퓨레입니다."
       },
@@ -1510,7 +1469,7 @@
         badge: "추천",
         price: 32000,
         origPrice: 39000,
-        img: "img/prod-toy.jpg",
+        img: "img/hero-3.jpg",
         desc: "천연 깃털 리필 3종과 8홀 원목 간식 퍼즐 박스 세트",
         detail: "사냥 본능 자극과 두뇌 활동을 동시에 충족시켜 실내 반려묘의 비만 예방과 스트레스 해소에 효과적입니다."
       },
@@ -1522,7 +1481,7 @@
         badge: "공간절약",
         price: 198000,
         origPrice: 245000,
-        img: "img/prod-catpole.jpg",
+        img: "img/hero-1.jpg",
         desc: "좁은 공간에도 설치 가능한 슬림 수직형 캣폴 & 360도 회전 발판",
         detail: "천장 높이 225~265cm까지 맞춤 조절 가능하며, 100% 천연 면로프 스크래처 기둥이 전 구간 적용되었습니다."
       },
@@ -1534,7 +1493,7 @@
         badge: "헬스케어",
         price: 16500,
         origPrice: 20000,
-        img: "img/prod-crunch.jpg",
+        img: "img/hero-2.jpg",
         desc: "식이섬유와 17종 유산균이 함유된 바삭한 치석 케어 기능성 트릿",
         detail: "그루밍이 잦은 장모종 및 실내묘의 헤어볼 배출을 돕고 씹는 과정에서 플라그 형성을 완화합니다."
       },
@@ -1546,42 +1505,223 @@
         badge: "BEST",
         price: 44000,
         origPrice: 54000,
-        img: "img/prod-scratcher.jpg",
+        img: "img/hero-4.jpg",
         desc: "먼지 날림 없는 고강도 친환경 골판지 & 로열블루 사이드 패널",
         detail: "고양이 척추 곡선에 맞춘 인체공학적 S라인 설계로 스크래칭과 낮잠을 동시에 즐길 수 있습니다."
       }
     ];
 
+    let PRODUCTS = [...FALLBACK_PRODUCTS];
     let state = {
-      user: JSON.parse(localStorage.getItem('rp_user')) || null,
+      user: null,
+      profile: null,
       cart: JSON.parse(localStorage.getItem('rp_cart')) || [{ id: 2, qty: 2 }],
       wishlist: JSON.parse(localStorage.getItem('rp_wish')) || [1],
+      orders: [],
+      pointHistory: [],
       currentSlide: 0,
       currentCategory: 'all',
       selectedPayMethod: '신용/체크카드'
     };
 
-    function saveState() {
-      localStorage.setItem('rp_user', JSON.stringify(state.user));
+    function saveLocalCartWish() {
       localStorage.setItem('rp_cart', JSON.stringify(state.cart));
       localStorage.setItem('rp_wish', JSON.stringify(state.wishlist));
     }
 
-    function getTierBySpend(totalSpend) {
-      let current = TIERS[0];
-      for (const t of TIERS) {
-        if (totalSpend >= t.minSpend) current = t;
+    function normalizeCategory(rawCat) {
+      const val = (rawCat || '').toLowerCase();
+      if (val.includes('tower') || val.includes('캣타워') || val.includes('캣폴') || val.includes('분류1')) return 'tower';
+      if (val.includes('treat') || val.includes('간식') || val.includes('분류2')) return 'treats';
+      if (val.includes('living') || val.includes('리빙') || val.includes('장난감') || val.includes('스크래처') || val.includes('분류3')) return 'living';
+      return 'treats';
+    }
+
+    function mapDbProduct(row, idx) {
+      const cat = normalizeCategory(row.category);
+      const defaultImg = cat === 'tower' ? 'img/hero-1.jpg' : cat === 'living' ? 'img/hero-3.jpg' : 'img/hero-2.jpg';
+      const price = Number(row.price) || 15000;
+      return {
+        id: row.id ?? (idx + 1),
+        name: row.name || `로열포우 상품 #${idx + 1}`,
+        category: cat,
+        catLabel: row.category || (cat === 'tower' ? '캣타워' : cat === 'living' ? '리빙·토이' : '프리미엄 간식'),
+        badge: row.badge || 'ROYAL',
+        price,
+        origPrice: Number(row.orig_price) || Math.round(price * 1.2),
+        img: row.image_url || row.img || defaultImg,
+        desc: row.description || row.desc || '로열포우 프리미엄 컬렉션 상품',
+        detail: row.detail || row.description || '엄선된 소재로 제작된 로열포우 공식 상품입니다.',
+        stock: row.stock ?? 99
+      };
+    }
+
+    async function loadProductsFromSupabase() {
+      try {
+        const { data, error } = await db
+          .from('shop_products')
+          .select('*')
+          .order('id', { ascending: true });
+        if (!error && Array.isArray(data) && data.length > 0) {
+          PRODUCTS = data.map(mapDbProduct);
+        }
+      } catch (err) {
+        console.warn('shop_products 조회 폴백 사용:', err);
       }
-      return current;
+    }
+
+    function getTierByGrade(grade) {
+      return TIERS.find(t => t.id === (grade || 'WELCOME').toUpperCase()) || TIERS[0];
     }
 
     function getCurrentUserTier() {
-      if (!state.user) return TIERS[0];
-      return getTierBySpend(state.user.totalSpend || 0);
+      if (!state.profile) return TIERS[0];
+      return getTierByGrade(state.profile.grade);
     }
 
     function formatWon(num) {
-      return num.toLocaleString('ko-KR') + '원';
+      return Number(num || 0).toLocaleString('ko-KR') + '원';
+    }
+
+    // Auth & Profile
+    async function syncAuthState() {
+      const { data: { session } } = await db.auth.getSession();
+      state.user = session?.user || null;
+      if (state.user) {
+        await loadUserProfileAndOrders(state.user);
+      } else {
+        state.profile = null;
+        state.orders = [];
+        state.pointHistory = [];
+      }
+      refreshAll();
+    }
+
+    async function loadUserProfileAndOrders(authUser) {
+      try {
+        let { data: prof } = await db
+          .from('shop_profiles')
+          .select('*')
+          .eq('id', authUser.id)
+          .single();
+
+        if (!prof) {
+          const meta = authUser.user_metadata || {};
+          const insertPayload = {
+            id: authUser.id,
+            email: authUser.email,
+            name: meta.name || authUser.email?.split('@')[0] || '집사님',
+            phone: meta.phone || '',
+            grade: 'WELCOME',
+            points: 3000,
+            role: 'member'
+          };
+          const { data: created } = await db
+            .from('shop_profiles')
+            .upsert(insertPayload, { onConflict: 'id' })
+            .select()
+            .single();
+          prof = created || insertPayload;
+        }
+
+        state.profile = prof;
+
+        const { data: ordersData } = await db
+          .from('shop_orders')
+          .select('*')
+          .eq('user_id', authUser.id)
+          .order('created_at', { ascending: false });
+
+        state.orders = Array.isArray(ordersData) ? ordersData : [];
+        state.pointHistory = [
+          {
+            date: new Date().toLocaleDateString('ko-KR'),
+            desc: `현재 보유 포인트 (${prof.grade || 'WELCOME'} 등급)`,
+            amount: Number(prof.points || 0)
+          }
+        ];
+      } catch (err) {
+        console.warn('프로필/주문 조회 오류:', err);
+      }
+    }
+
+    function openAuthModal(tab = 'login') {
+      switchAuthTab(tab);
+      document.getElementById('authModal').classList.add('open');
+    }
+
+    function switchAuthTab(tab) {
+      const isLogin = tab === 'login';
+      document.getElementById('tabLogin').classList.toggle('active', isLogin);
+      document.getElementById('tabSignup').classList.toggle('active', !isLogin);
+      document.getElementById('loginForm').style.display = isLogin ? 'block' : 'none';
+      document.getElementById('signupForm').style.display = isLogin ? 'none' : 'block';
+      document.getElementById('authModalTitle').textContent = isLogin
+        ? '로열포우 멤버십 로그인'
+        : '신규 회원가입 · 즉시 3,000P 지급';
+    }
+
+    async function handleSignup(e) {
+      e.preventDefault();
+      const name = document.getElementById('signupName').value.trim();
+      const phone = document.getElementById('signupPhone').value.trim();
+      const catName = document.getElementById('signupCatName').value.trim();
+      const email = document.getElementById('signupEmail').value.trim();
+      const password = document.getElementById('signupPw').value;
+
+      const { data, error } = await db.auth.signUp({
+        email,
+        password,
+        options: {
+          data: { name, phone, cat_name: catName }
+        }
+      });
+
+      if (error) {
+        showToast('❌ 회원가입 실패: ' + error.message);
+        return;
+      }
+
+      if (data.user) {
+        await db.from('shop_profiles').upsert({
+          id: data.user.id,
+          email,
+          name,
+          phone,
+          grade: 'WELCOME',
+          points: 3000,
+          role: 'member'
+        }, { onConflict: 'id' });
+      }
+
+      closeModal('authModal');
+      await syncAuthState();
+      showToast(`🎉 ${name}님 회원가입 완료! DB에 회원 정보가 등록되었습니다.`);
+    }
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPw').value;
+
+      const { error } = await db.auth.signInWithPassword({ email, password });
+      if (error) {
+        showToast('❌ 로그인 실패: ' + error.message);
+        return;
+      }
+
+      closeModal('authModal');
+      await syncAuthState();
+      showToast('👑 로열포우에 로그인되었습니다!');
+    }
+
+    async function logout() {
+      await db.auth.signOut();
+      state.user = null;
+      state.profile = null;
+      state.orders = [];
+      refreshAll();
+      showToast('로그아웃되었습니다.');
     }
 
     // Hero Slider
@@ -1643,18 +1783,21 @@
       }, 100);
     }
 
-    // Nav & Auth
+    // Nav
     function renderNav() {
       const navEl = document.getElementById('navActions');
       const totalItems = state.cart.reduce((sum, item) => sum + item.qty, 0);
 
-      if (state.user) {
+      if (state.user && state.profile) {
         const tier = getCurrentUserTier();
+        const pts = Number(state.profile.points || 0);
+        const isAdmin = state.profile.role === 'admin';
         navEl.innerHTML = `
-          <button class="member-pill" onclick="openMyPage()" title="마이페이지 및 포인트 내역">
+          <button class="member-pill" onclick="openMyPage()" title="마이페이지 및 주문/포인트 조회">
             <span class="tier-dot">${tier.icon} ${tier.name}</span>
-            <span><strong>${state.user.name}</strong>님 · <strong style="color:var(--gold-light)">${state.user.points.toLocaleString()}P</strong></span>
+            <span><strong>${state.profile.name || state.user.email}</strong>님 · <strong style="color:var(--gold-light)">${pts.toLocaleString()}P</strong></span>
           </button>
+          ${isAdmin ? `<a href="admin.html" class="btn-nav btn-gold">회원관리</a>` : ''}
           <button class="btn-nav btn-outline" onclick="logout()">로그아웃</button>
           <button class="cart-trigger" onclick="openCart()">
             🛒 장바구니 <span class="cart-badge">${totalItems}</span>
@@ -1670,105 +1813,10 @@
         `;
       }
 
-      // Highlight current tier card in membership section
       const currentTier = getCurrentUserTier();
       document.querySelectorAll('.tier-card').forEach(card => {
-        card.classList.toggle('current-tier-highlight', Boolean(state.user && card.dataset.tier === currentTier.id));
+        card.classList.toggle('current-tier-highlight', Boolean(state.profile && card.dataset.tier === currentTier.id));
       });
-    }
-
-    function openAuthModal(tab = 'login') {
-      switchAuthTab(tab);
-      document.getElementById('authModal').classList.add('open');
-    }
-
-    function switchAuthTab(tab) {
-      const isLogin = tab === 'login';
-      document.getElementById('tabLogin').classList.toggle('active', isLogin);
-      document.getElementById('tabSignup').classList.toggle('active', !isLogin);
-      document.getElementById('loginForm').style.display = isLogin ? 'block' : 'none';
-      document.getElementById('signupForm').style.display = isLogin ? 'none' : 'block';
-      document.getElementById('authModalTitle').textContent = isLogin
-        ? '로열포우 멤버십 로그인'
-        : '신규 회원가입 · 즉시 3,000P 지급';
-    }
-
-    function handleSignup(e) {
-      e.preventDefault();
-      const name = document.getElementById('signupName').value.trim();
-      const catName = document.getElementById('signupCatName').value.trim();
-      const email = document.getElementById('signupEmail').value.trim();
-
-      state.user = {
-        name,
-        catName,
-        email,
-        points: 3000,
-        totalSpend: 0,
-        pointHistory: [
-          { date: new Date().toLocaleDateString('ko-KR'), desc: `신규 회원가입 축하 적립 (${catName} 보호자님)`, amount: +3000 }
-        ],
-        orders: []
-      };
-      saveState();
-      closeModal('authModal');
-      refreshAll();
-      showToast(`🎉 ${name}님 환영합니다! 가입 축하 3,000P가 즉시 지급되었습니다.`);
-    }
-
-    function handleLogin(e) {
-      e.preventDefault();
-      const email = document.getElementById('loginEmail').value.trim();
-      const namePart = email.split('@')[0] || '로열집사';
-      state.user = {
-        name: namePart,
-        catName: '루나',
-        email,
-        points: 5000,
-        totalSpend: 120000,
-        pointHistory: [{ date: '2026. 11. 10.', desc: '실버캣 멤버십 승급 보너스', amount: +5000 }],
-        orders: []
-      };
-      saveState();
-      closeModal('authModal');
-      refreshAll();
-      showToast(`👑 ${namePart}님, 로열포우에 다시 오신 것을 환영합니다!`);
-    }
-
-    function quickDemoLogin(tierType) {
-      const presets = {
-        kitten: {
-          name: '김집사', catName: '모찌', email: 'kitten@royalpaw.kr', points: 3000, totalSpend: 0,
-          pointHistory: [{ date: '2026. 11. 19.', desc: '신규 회원가입 축하 적립', amount: +3000 }], orders: []
-        },
-        royal: {
-          name: '박로열', catName: '레오', email: 'royal@royalpaw.kr', points: 18500, totalSpend: 345000,
-          pointHistory: [
-            { date: '2026. 11. 12.', desc: '로열 아키텍트 캣타워 구매 적립 (7%)', amount: +15500 },
-            { date: '2026. 11. 01.', desc: '신규 회원가입 축하 적립', amount: +3000 }
-          ], orders: []
-        },
-        emperor: {
-          name: '최엠퍼러', catName: '벨라', email: 'emperor@royalpaw.kr', points: 45000, totalSpend: 680000,
-          pointHistory: [
-            { date: '2026. 11. 15.', desc: '엠퍼러캣 VIP 리워드 적립 (10%)', amount: +42000 },
-            { date: '2026. 10. 20.', desc: '신규 회원가입 축하 적립', amount: +3000 }
-          ], orders: []
-        }
-      };
-      state.user = presets[tierType];
-      saveState();
-      closeModal('authModal');
-      refreshAll();
-      const tier = getCurrentUserTier();
-      showToast(`${tier.icon} [${tier.name}] 등급(${Math.round(tier.rate * 100)}% 적립)으로 로그인되었습니다!`);
-    }
-
-    function logout() {
-      state.user = null;
-      saveState();
-      refreshAll();
-      showToast('로그아웃되었습니다.');
     }
 
     // Catalog & Products
@@ -1795,7 +1843,7 @@
         state.wishlist.push(id);
         showToast('❤️ 관심 상품에 저장되었습니다.');
       }
-      saveState();
+      saveLocalCartWish();
       renderProducts();
     }
 
@@ -1824,7 +1872,7 @@
         return `
           <article class="product-card">
             <div class="product-thumb" onclick="openProductDetail(${p.id})">
-              <img src="${p.img}" alt="${p.name}" />
+              <img src="${p.img}" alt="${p.name}" onerror="this.src='img/hero-1.jpg'" />
               <div class="product-badges">
                 <span class="p-badge best">${p.badge}</span>
                 <span class="p-badge cat">${p.catLabel}</span>
@@ -1853,6 +1901,7 @@
 
     function openProductDetail(id) {
       const p = PRODUCTS.find(x => x.id === id);
+      if (!p) return;
       const tier = getCurrentUserTier();
       const earnPts = Math.floor(p.price * tier.rate);
 
@@ -1862,7 +1911,7 @@
           <button class="close-btn" onclick="closeModal('productModal')">✕</button>
         </div>
         <div style="display:grid; grid-template-columns: 1fr 1.1fr; gap:22px; align-items:center;">
-          <img src="${p.img}" alt="${p.name}" style="border-radius:14px; border:1px solid var(--border-subtle);" />
+          <img src="${p.img}" alt="${p.name}" onerror="this.src='img/hero-1.jpg'" style="border-radius:14px; border:1px solid var(--border-subtle);" />
           <div>
             <span class="p-badge best" style="display:inline-block; margin-bottom:10px;">${p.badge}</span>
             <h2 style="font-size:1.35rem; margin-bottom:10px;">${p.name}</h2>
@@ -1886,12 +1935,13 @@
 
     // Cart & Checkout
     function addToCart(productId) {
+      const prod = PRODUCTS.find(p => p.id === productId);
+      if (!prod) return;
       const existing = state.cart.find(i => i.id === productId);
       if (existing) existing.qty += 1;
       else state.cart.push({ id: productId, qty: 1 });
-      saveState();
+      saveLocalCartWish();
       refreshAll();
-      const prod = PRODUCTS.find(p => p.id === productId);
       showToast(`🛒 '${prod.name}' 상품이 장바구니에 담겼습니다.`);
     }
 
@@ -1899,7 +1949,7 @@
       const existing = state.cart.find(i => i.id === productId);
       if (!existing) {
         state.cart.push({ id: productId, qty: 1 });
-        saveState();
+        saveLocalCartWish();
         refreshAll();
       }
       openCheckout();
@@ -1910,7 +1960,7 @@
       if (idx === -1) return;
       state.cart[idx].qty += delta;
       if (state.cart[idx].qty <= 0) state.cart.splice(idx, 1);
-      saveState();
+      saveLocalCartWish();
       refreshAll();
     }
 
@@ -1952,10 +2002,10 @@
         `;
       } else {
         itemsEl.innerHTML = state.cart.map(item => {
-          const p = PRODUCTS.find(x => x.id === item.id);
+          const p = PRODUCTS.find(x => x.id === item.id) || FALLBACK_PRODUCTS[0];
           return `
             <div class="cart-item">
-              <img src="${p.img}" alt="${p.name}" />
+              <img src="${p.img}" alt="${p.name}" onerror="this.src='img/hero-1.jpg'" />
               <div class="cart-item-body">
                 <div style="display:flex; justify-content:space-between; gap:8px;">
                   <strong style="font-size:0.88rem;">${p.name}</strong>
@@ -2001,27 +2051,31 @@
       closeCart();
 
       const { total, tier } = calcCartMetrics();
-      document.getElementById('orderReceiver').value = state.user ? state.user.name : '비회원 고객';
+      const userPts = Number(state.profile?.points || 0);
+      document.getElementById('orderReceiver').value = state.profile?.name || state.user?.email || '고객';
+      if (state.profile?.phone) {
+        document.getElementById('orderPhone').value = state.profile.phone;
+      }
 
       const pointSec = document.getElementById('checkoutPointSection');
       if (state.user) {
         pointSec.innerHTML = `
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
             <span style="font-size:0.85rem; font-weight:700; color:var(--gold-light);">
-              ${tier.icon} ${state.user.name}님 보유 포인트 (${tier.name} · ${Math.round(tier.rate * 100)}% 적립)
+              ${tier.icon} ${state.profile?.name || '회원'}님 보유 포인트 (${tier.name} · ${Math.round(tier.rate * 100)}% 적립)
             </span>
-            <strong style="font-size:0.95rem;">${state.user.points.toLocaleString()}P</strong>
+            <strong style="font-size:0.95rem;">${userPts.toLocaleString()}P</strong>
           </div>
           <div style="display:flex; gap:8px;">
-            <input type="number" id="usePointInput" class="form-input" min="0" max="${Math.min(state.user.points, total)}" value="0" oninput="updateCheckoutTotals()" />
+            <input type="number" id="usePointInput" class="form-input" min="0" max="${Math.min(userPts, total)}" value="0" oninput="updateCheckoutTotals()" />
             <button type="button" class="btn-nav btn-outline" style="white-space:nowrap;" onclick="useAllPoints()">전액 사용</button>
           </div>
         `;
       } else {
         pointSec.innerHTML = `
           <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
-            <span style="font-size:0.84rem; color:var(--text-sub);">로그인/회원가입 시 <strong>3,000P 즉시 할인</strong> 및 등급 적립 혜택을 받을 수 있습니다.</span>
-            <button type="button" class="btn-nav btn-gold" style="white-space:nowrap;" onclick="closeModal('checkoutModal'); openAuthModal('signup');">3,000P 받기</button>
+            <span style="font-size:0.84rem; color:var(--text-sub);">로그인/회원가입 후 주문하시면 <strong>shop_orders</strong>에 주문 내역이 저장됩니다.</span>
+            <button type="button" class="btn-nav btn-gold" style="white-space:nowrap;" onclick="closeModal('checkoutModal'); openAuthModal('login');">로그인하기</button>
           </div>
         `;
       }
@@ -2031,11 +2085,12 @@
     }
 
     function useAllPoints() {
-      if (!state.user) return;
+      if (!state.user || !state.profile) return;
       const { total } = calcCartMetrics();
+      const userPts = Number(state.profile.points || 0);
       const input = document.getElementById('usePointInput');
       if (input) {
-        input.value = Math.min(state.user.points, total);
+        input.value = Math.min(userPts, total);
         updateCheckoutTotals();
       }
     }
@@ -2044,8 +2099,9 @@
       const { subtotal, shipping, total, tier } = calcCartMetrics();
       let usedPts = 0;
       const input = document.getElementById('usePointInput');
-      if (input && state.user) {
-        usedPts = Math.max(0, Math.min(Number(input.value) || 0, state.user.points, total));
+      if (input && state.user && state.profile) {
+        const userPts = Number(state.profile.points || 0);
+        usedPts = Math.max(0, Math.min(Number(input.value) || 0, userPts, total));
         input.value = usedPts;
       }
       const finalPay = total - usedPts;
@@ -2065,117 +2121,131 @@
       btn.classList.add('active');
     }
 
-    function processPayment(e) {
+    async function processPayment(e) {
       e.preventDefault();
+      if (!state.user) {
+        closeModal('checkoutModal');
+        openAuthModal('login');
+        showToast('먼저 로그인해 주세요!');
+        return;
+      }
+
       const btn = document.getElementById('paySubmitBtn');
       btn.disabled = true;
-      btn.textContent = '⏳ 로열페이 보안 결제 승인 처리 중...';
+      btn.textContent = '⏳ 주문 저장 중...';
 
-      setTimeout(() => {
-        const { subtotal, total } = calcCartMetrics();
-        const prevTier = getCurrentUserTier();
-        let usedPts = 0;
+      try {
+        const { subtotal, total, tier } = calcCartMetrics();
+        const userPts = Number(state.profile?.points || 0);
         const input = document.getElementById('usePointInput');
-        if (input && state.user) {
-          usedPts = Math.max(0, Math.min(Number(input.value) || 0, state.user.points, total));
-        }
+        const usedPts = input ? Math.max(0, Math.min(Number(input.value) || 0, userPts, total)) : 0;
         const finalPay = total - usedPts;
-        const earnPts = Math.floor(Math.max(0, subtotal - usedPts) * prevTier.rate);
-        const orderNo = 'RP-' + Date.now().toString().slice(-6);
+        const earnPts = Math.floor(Math.max(0, subtotal - usedPts) * tier.rate);
 
-        let upgradedMsg = '';
-        if (state.user) {
-          const today = new Date().toLocaleDateString('ko-KR');
-          if (usedPts > 0) {
-            state.user.points -= usedPts;
-            state.user.pointHistory.unshift({ date: today, desc: `주문(${orderNo}) 포인트 사용`, amount: -usedPts });
-          }
-          state.user.points += earnPts;
-          state.user.totalSpend = (state.user.totalSpend || 0) + finalPay;
-          state.user.pointHistory.unshift({
-            date: today,
-            desc: `주문(${orderNo}) 구매 적립 (${prevTier.name} ${Math.round(prevTier.rate * 100)}%)`,
-            amount: +earnPts
-          });
-          state.user.orders.unshift({
-            orderNo, date: today, amount: finalPay, method: state.selectedPayMethod, earned: earnPts
-          });
+        const receiver = document.getElementById('orderReceiver').value.trim();
+        const phone = document.getElementById('orderPhone').value.trim();
+        const address = document.getElementById('orderAddress').value.trim();
 
-          const newTier = getCurrentUserTier();
-          if (newTier.id !== prevTier.id) {
-            upgradedMsg = `🎊 축하합니다! 누적 구매 달성으로 [${newTier.icon} ${newTier.name}] 등급으로 승급되었습니다!`;
+        const { data: orderRow, error: orderErr } = await db
+          .from('shop_orders')
+          .insert({
+            user_id: state.user.id,
+            total: finalPay,
+            used_points: usedPts,
+            earned_points: earnPts,
+            status: 'PAID',
+            receiver_name: receiver,
+            phone,
+            address,
+            pay_method: state.selectedPayMethod
+          })
+          .select()
+          .single();
+
+        if (orderErr) {
+          throw new Error(orderErr.message);
+        }
+
+        if (orderRow?.id) {
+          const orderItemsPayload = state.cart.map(item => {
+            const p = PRODUCTS.find(x => x.id === item.id) || FALLBACK_PRODUCTS[0];
+            return {
+              order_id: orderRow.id,
+              product_id: p.id,
+              product_name: p.name,
+              qty: item.qty,
+              unit_price: p.price
+            };
+          });
+          const { error: itemsErr } = await db.from('shop_order_items').insert(orderItemsPayload);
+          if (itemsErr) {
+            console.warn('shop_order_items 저장 안내:', itemsErr.message);
           }
         }
+
+        const nextPoints = Math.max(0, userPts - usedPts + earnPts);
+        await db
+          .from('shop_profiles')
+          .update({ points: nextPoints })
+          .eq('id', state.user.id);
 
         state.cart = [];
-        saveState();
-        btn.disabled = false;
-        closeModal('checkoutModal');
+        saveLocalCartWish();
+        await loadUserProfileAndOrders(state.user);
         refreshAll();
-
-        showToast(`✅ 결제가 완료되었습니다! (주문번호: ${orderNo} / 결제액: ${formatWon(finalPay)})`);
-        if (upgradedMsg) setTimeout(() => showToast(upgradedMsg), 600);
-      }, 850);
+        closeModal('checkoutModal');
+        showToast(`✅ 주문 완료! (${formatWon(finalPay)} / +${earnPts.toLocaleString()}P 적립)`);
+      } catch (err) {
+        showToast('❌ 주문 처리 오류: ' + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '결제하기';
+      }
     }
 
     function openMyPage() {
-      if (!state.user) {
+      if (!state.user || !state.profile) {
         openAuthModal('login');
         return;
       }
       const tier = getCurrentUserTier();
-      const nextTier = TIERS.find(t => t.minSpend > (state.user.totalSpend || 0));
-      const nextInfo = nextTier
-        ? `다음 등급 <strong>${nextTier.icon} ${nextTier.name}</strong>까지 <strong>${formatWon(nextTier.minSpend - state.user.totalSpend)}</strong> 남았습니다.`
-        : `최고 등급 <strong>💎 엠퍼러캣</strong> 혜택을 누리고 계십니다!`;
+      const pts = Number(state.profile.points || 0);
 
       document.getElementById('mypageContent').innerHTML = `
         <div class="modal-head">
-          <h3>👑 로열 멤버십 &amp; 포인트 라운지</h3>
+          <h3>👑 로열 멤버십 &amp; 주문 내역</h3>
           <button class="close-btn" onclick="closeModal('mypageModal')">✕</button>
         </div>
 
         <div style="background:linear-gradient(135deg, var(--royal-blue), #0F234A); border:1px solid var(--border-gold); border-radius:16px; padding:20px; margin-bottom:20px;">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
             <div>
-              <span class="tier-dot">${tier.icon} ${tier.name} (${Math.round(tier.rate * 100)}% 적립)</span>
-              <h2 style="font-size:1.35rem; margin-top:8px;">${state.user.name} 집사님 &amp; ${state.user.catName}</h2>
+              <span class="tier-dot">${tier.icon} ${tier.name} (${state.profile.grade || 'WELCOME'})</span>
+              <h2 style="font-size:1.35rem; margin-top:8px;">${state.profile.name || '회원'}님</h2>
+              <div style="font-size:0.8rem; color:var(--text-sub);">${state.profile.email || state.user.email}</div>
             </div>
             <div style="text-align:right;">
-              <div style="font-size:0.78rem; color:var(--text-sub);">사용 가능 포인트</div>
-              <div style="font-size:1.65rem; font-weight:800; color:var(--gold-light);">${state.user.points.toLocaleString()}P</div>
+              <div style="font-size:0.78rem; color:var(--text-sub);">보유 포인트</div>
+              <div style="font-size:1.65rem; font-weight:800; color:var(--gold-light);">${pts.toLocaleString()}P</div>
             </div>
-          </div>
-          <div style="font-size:0.84rem; color:var(--text-sub); padding-top:10px; border-top:1px solid rgba(255,255,255,0.15);">
-            누적 구매 금액: <strong>${formatWon(state.user.totalSpend || 0)}</strong> · ${nextInfo}
           </div>
         </div>
 
-        <h4 style="font-size:0.95rem; margin-bottom:10px;">📜 최근 포인트 적립 · 사용 내역</h4>
-        <div style="max-height:190px; overflow-y:auto; display:flex; flex-direction:column; gap:8px; margin-bottom:18px;">
-          ${(state.user.pointHistory || []).map(h => `
-            <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 14px; background:var(--bg-dark); border-radius:10px; font-size:0.84rem;">
-              <div>
-                <div style="font-weight:600;">${h.desc}</div>
-                <div style="font-size:0.75rem; color:var(--text-muted);">${h.date}</div>
-              </div>
-              <strong style="color:${h.amount >= 0 ? 'var(--emerald)' : 'var(--coral)'};">
-                ${h.amount >= 0 ? '+' : ''}${h.amount.toLocaleString()}P
-              </strong>
-            </div>
-          `).join('')}
-        </div>
-
-        <h4 style="font-size:0.95rem; margin-bottom:10px;">📦 최근 주문 내역</h4>
-        <div style="max-height:140px; overflow-y:auto; display:flex; flex-direction:column; gap:8px;">
-          ${(state.user.orders && state.user.orders.length > 0)
-            ? state.user.orders.map(o => `
-                <div style="display:flex; justify-content:space-between; padding:10px 14px; background:var(--bg-dark); border-radius:10px; font-size:0.84rem;">
-                  <span><strong>${o.orderNo}</strong> (${o.date} · ${o.method})</span>
-                  <span>${formatWon(o.amount)} <strong style="color:var(--gold-light);">(+${o.earned.toLocaleString()}P)</strong></span>
+        <h4 style="font-size:0.95rem; margin-bottom:10px;">📦 내 주문 내역 (shop_orders)</h4>
+        <div style="max-height:220px; overflow-y:auto; display:flex; flex-direction:column; gap:8px;">
+          ${(state.orders && state.orders.length > 0)
+            ? state.orders.map(o => `
+                <div style="display:flex; justify-content:space-between; padding:12px 14px; background:var(--bg-dark); border-radius:10px; font-size:0.84rem;">
+                  <div>
+                    <strong>주문 #${o.id}</strong> · <span style="color:var(--cyan);">${o.status || 'PAID'}</span>
+                    <div style="font-size:0.75rem; color:var(--text-muted);">${o.created_at ? new Date(o.created_at).toLocaleString('ko-KR') : ''}</div>
+                  </div>
+                  <div style="text-align:right;">
+                    <strong>${formatWon(o.total)}</strong>
+                  </div>
                 </div>
               `).join('')
-            : `<div style="font-size:0.84rem; color:var(--text-muted); padding:12px; background:var(--bg-dark); border-radius:10px;">아직 완료된 주문 내역이 없습니다.</div>`
+            : `<div style="font-size:0.84rem; color:var(--text-muted); padding:14px; background:var(--bg-dark); border-radius:10px;">아직 주문 내역이 없습니다.</div>`
           }
         </div>
       `;
@@ -2204,9 +2274,21 @@
       renderCart();
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      initHeroSlider();
+    db.auth.onAuthStateChange(async (_event, session) => {
+      state.user = session?.user || null;
+      if (state.user) {
+        await loadUserProfileAndOrders(state.user);
+      } else {
+        state.profile = null;
+        state.orders = [];
+      }
       refreshAll();
+    });
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      initHeroSlider();
+      await loadProductsFromSupabase();
+      await syncAuthState();
     });
   </script>
 </body>
