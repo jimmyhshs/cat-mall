@@ -142,6 +142,7 @@
       border: 1px solid var(--border-gold);
       font-size: 0.83rem;
       transition: var(--transition);
+      cursor: pointer;
     }
     .member-pill:hover { background: rgba(29, 78, 216, 0.45); }
     .tier-dot {
@@ -1045,7 +1046,7 @@
             </div>
             <div style="display:flex; gap:10px;">
               <button class="btn-nav btn-royal" onclick="filterAndScroll('tower')">캣타워 라인업 보기</button>
-              <button class="btn-nav btn-outline" onclick="addToCart(1)">바로 담기</button>
+              <button class="btn-nav btn-outline" onclick="addFirstByCategory('tower')">바로 담기</button>
             </div>
           </div>
           <div class="curation-media">
@@ -1057,21 +1058,21 @@
           <div class="curation-body">
             <div>
               <span class="curation-badge">GOURMET NUTRITION</span>
-              <h3>노르웨이 생연어 &amp; 닭가슴살 동결건조 트릿</h3>
-              <p>영하 40℃ 급속 동결건조 공법으로 원재료의 풍미와 타우린·오메가3 영양소를 98% 이상 보존했습니다.</p>
+              <h3>영하 40℃ 동결건조 수제 고메 트릿</h3>
+              <p>생연어·오리안심·초록입홍합 등 단일 원육만을 영하 40도에서 급속 동결건조해 기호성과 영양을 모두 잡았습니다.</p>
               <ul class="spec-list">
-                <li>100% 휴먼그레이드 단일 원육 · 그레인프리</li>
-                <li>인공색소·보존료·부산물 0% 무첨가</li>
-                <li>음수량 보충을 위한 고단백 퓨레 스틱 라인 완비</li>
+                <li>무곡물 · 무보존제 · 휴먼그레이드 100% 원육</li>
+                <li>음수량 보충을 돕는 순살 퓨레 &amp; 수프 라인</li>
+                <li>치석 케어용 천연 마따따비 덴탈 스틱</li>
               </ul>
             </div>
             <div style="display:flex; gap:10px;">
-              <button class="btn-nav btn-gold" onclick="filterAndScroll('treats')">간식 컬렉션 보기</button>
-              <button class="btn-nav btn-outline" onclick="addToCart(2)">바로 담기</button>
+              <button class="btn-nav btn-gold" onclick="filterAndScroll('treat')">간식 라인업 보기</button>
+              <button class="btn-nav btn-outline" onclick="addFirstByCategory('treat')">바로 담기</button>
             </div>
           </div>
           <div class="curation-media">
-            <img src="img/hero-2.jpg" alt="노르웨이 생연어 동결건조 트릿" />
+            <img src="img/hero-2.jpg" alt="로열포우 고메 간식 컬렉션" />
           </div>
         </article>
       </div>
@@ -1082,31 +1083,31 @@
     <div class="container">
       <div class="section-head">
         <div>
-          <span class="section-kicker">ROYAL BOUTIQUE STORE</span>
-          <h2 class="section-title">로열포우 베스트 컬렉션</h2>
-          <p class="section-sub">현재 회원 등급에 맞춘 예상 적립 포인트가 상품별로 자동 계산됩니다.</p>
+          <span class="section-kicker">ROYAL PAW BOUTIQUE</span>
+          <h2 class="section-title">프리미엄 스토어 전체 상품</h2>
+          <p class="section-sub">Supabase DB(<code>shop_products</code>)에서 실시간으로 불러온 상품 목록입니다.</p>
         </div>
       </div>
 
       <div class="filter-bar">
         <div class="filter-tabs" id="filterTabs">
-          <button class="filter-tab active" data-cat="all" onclick="setCategory('all')">전체 상품</button>
-          <button class="filter-tab" data-cat="tower" onclick="setCategory('tower')">🏰 캣타워 · 캣폴</button>
-          <button class="filter-tab" data-cat="treats" onclick="setCategory('treats')">🍣 프리미엄 간식</button>
-          <button class="filter-tab" data-cat="living" onclick="setCategory('living')">🛋️ 리빙 · 장난감</button>
+          <button class="filter-tab active" data-cat="all" onclick="setCategory('all', this)">전체 보기</button>
         </div>
-
         <div class="catalog-tools">
-          <input type="text" class="search-input" id="searchInput" placeholder="상품명·키워드 검색..." oninput="renderProducts()" />
-          <select class="sort-select" id="sortSelect" onchange="renderProducts()">
-            <option value="featured">추천순 정렬</option>
+          <input type="text" id="searchInput" class="search-input" placeholder="상품명 검색..." oninput="renderProducts()" />
+          <select id="sortSelect" class="sort-select" onchange="renderProducts()">
+            <option value="default">추천순</option>
             <option value="price-asc">낮은 가격순</option>
             <option value="price-desc">높은 가격순</option>
           </select>
         </div>
       </div>
 
-      <div class="product-grid" id="productGrid"></div>
+      <div class="product-grid" id="productGrid">
+        <div style="grid-column:1/-1; text-align:center; padding:60px 0; color:var(--text-muted);">
+          데이터베이스에서 상품 목록을 불러오는 중입니다...
+        </div>
+      </div>
     </div>
   </section>
 
@@ -1115,58 +1116,54 @@
       <div class="section-head">
         <div>
           <span class="section-kicker">ROYAL MEMBERSHIP CLUB</span>
-          <h2 class="section-title">등급이 올라갈수록 커지는 로열 포인트 혜택</h2>
-          <p class="section-sub">누적 구매 금액에 따라 등급이 자동 승급되며, 적립된 포인트는 결제 시 현금처럼 즉시 사용 가능합니다.</p>
+          <h2 class="section-title">구매할수록 커지는 로열 포인트 혜택</h2>
+          <p class="section-sub">회원가입 즉시 WELCOME 등급과 3,000P가 지급되며, 누적 구매 실적에 따라 최대 10% 적립됩니다.</p>
         </div>
-        <button class="btn-nav btn-gold" onclick="openAuthModal('signup')">무료 회원가입하고 3,000P 받기 →</button>
       </div>
 
       <div class="tier-grid" id="tierGrid">
-        <div class="tier-card" data-tier="WELCOME">
+        <div class="tier-card" data-grade="WELCOME">
           <div class="tier-icon">🐾</div>
-          <div class="tier-name">아기고양이 (WELCOME)</div>
-          <div class="tier-cond">신규 회원가입 즉시 부여</div>
-          <div class="tier-rate">2% <span>포인트 적립</span></div>
+          <div class="tier-name">WELCOME</div>
+          <div class="tier-cond">신규 가입 회원 기본 등급</div>
+          <div class="tier-rate">3% <span>포인트 적립</span></div>
           <ul class="tier-benefits">
-            <li>가입 축하 3,000P 즉시 지급</li>
+            <li>신규 가입 축하 3,000P 즉시 지급</li>
             <li>50,000원 이상 구매 시 무료배송</li>
-            <li>첫 구매 감사 샘플 간식 2종 증정</li>
+            <li>생일 기념 5,000P 축하 쿠폰</li>
           </ul>
         </div>
-
-        <div class="tier-card" data-tier="SILVER">
+        <div class="tier-card" data-grade="SILVER">
           <div class="tier-icon">🥈</div>
-          <div class="tier-name">실버캣 (SILVER)</div>
-          <div class="tier-cond">누적 구매 100,000원 이상</div>
-          <div class="tier-rate">4% <span>포인트 적립</span></div>
+          <div class="tier-name">SILVER</div>
+          <div class="tier-cond">누적 구매 10만원 이상</div>
+          <div class="tier-rate">5% <span>포인트 적립</span></div>
           <ul class="tier-benefits">
-            <li>결제 금액의 4% 상시 포인트 적립</li>
+            <li>전 상품 상시 5% 로열 포인트 적립</li>
             <li>30,000원 이상 구매 시 무료배송</li>
-            <li>월간 간식 10% 전용 할인 쿠폰</li>
+            <li>신제품 고메 간식 샘플 키트 증정</li>
           </ul>
         </div>
-
-        <div class="tier-card featured" data-tier="GOLD">
-          <div class="tier-icon">👑</div>
-          <div class="tier-name">로열캣 (GOLD)</div>
-          <div class="tier-cond">누적 구매 300,000원 이상</div>
+        <div class="tier-card featured" data-grade="GOLD">
+          <div class="tier-icon">🥇</div>
+          <div class="tier-name">GOLD</div>
+          <div class="tier-cond">누적 구매 30만원 이상</div>
           <div class="tier-rate">7% <span>포인트 적립</span></div>
           <ul class="tier-benefits">
-            <li>결제 금액의 7% 고율 포인트 적립</li>
-            <li>금액 상관없이 전 상품 무료배송</li>
-            <li>반려묘 생일 축하 5,000P 지급</li>
+            <li>전 상품 상시 7% 로열 포인트 적립</li>
+            <li>금액 무관 전 상품 상시 무료배송</li>
+            <li>캣타워 스크래처 리필 15% 할인</li>
           </ul>
         </div>
-
-        <div class="tier-card" data-tier="VIP">
-          <div class="tier-icon">💎</div>
-          <div class="tier-name">엠퍼러캣 (VIP)</div>
-          <div class="tier-cond">누적 구매 600,000원 이상</div>
+        <div class="tier-card" data-grade="VIP">
+          <div class="tier-icon">👑</div>
+          <div class="tier-name">VIP</div>
+          <div class="tier-cond">누적 구매 70만원 이상</div>
           <div class="tier-rate">10% <span>포인트 적립</span></div>
           <ul class="tier-benefits">
-            <li>업계 최고 10% 무제한 포인트 적립</li>
-            <li>전 상품 무료배송 &amp; 우선 출고</li>
-            <li>분기별 시크릿 신상품 기프트 박스</li>
+            <li>전 상품 업계 최고 10% 포인트 적립</li>
+            <li>전 상품 무료배송 및 당일 우선 출고</li>
+            <li>원목 캣타워 무상 방문 케어 서비스</li>
           </ul>
         </div>
       </div>
@@ -1181,47 +1178,48 @@
             <div class="logo-emblem">👑</div>
             <div class="logo-text">
               <span class="logo-title">ROYAL PAW</span>
-              <span class="logo-sub">PREMIUM CAT BOUTIQUE</span>
+              <span class="logo-sub">CAT ARCHITECTURE &amp; GOURMET</span>
             </div>
           </div>
-          <p>고양이의 수직 본능과 미식 경험을 디자인하는 프리미엄 캣 라이프스타일 브랜드 로열포우입니다.</p>
+          <p>반려묘의 수직 본능과 미식 건강을 설계하는 프리미엄 펫 부티크 로열포우입니다.</p>
         </div>
         <div class="footer-col">
-          <h4>쇼핑 카테고리</h4>
+          <h4>COLLECTIONS</h4>
           <ul>
-            <li><a href="#catalog" onclick="setCategory('tower')">원목 캣타워 &amp; 캣폴</a></li>
-            <li><a href="#catalog" onclick="setCategory('treats')">동결건조 &amp; 퓨레 간식</a></li>
-            <li><a href="#catalog" onclick="setCategory('living')">벨벳 베드 &amp; 인터랙티브 토이</a></li>
+            <li><a href="#catalog">원목 캣타워 컬렉션</a></li>
+            <li><a href="#catalog">동결건조 고메 간식</a></li>
+            <li><a href="#catalog">스크래처 &amp; 리빙 소품</a></li>
           </ul>
         </div>
         <div class="footer-col">
-          <h4>멤버십 서비스</h4>
+          <h4>MEMBERSHIP</h4>
           <ul>
-            <li><a href="#membership">등급별 포인트 적립 안내</a></li>
-            <li><a href="javascript:void(0)" onclick="openAuthModal('signup')">신규 회원가입 (3,000P)</a></li>
-            <li><a href="javascript:void(0)" onclick="openMyPage()">마이페이지 · 주문/포인트 조회</a></li>
+            <li><a href="#membership">등급별 포인트 안내</a></li>
+            <li><a href="javascript:void(0)" onclick="openAuthModal('signup')">신규 가입 3,000P 받기</a></li>
+            <li><a href="javascript:void(0)" onclick="openMyPage()">마이페이지 / 주문내역</a></li>
           </ul>
         </div>
         <div class="footer-col">
-          <h4>고객 컨시어지</h4>
+          <h4>CUSTOMER CARE</h4>
           <ul>
-            <li>운영시간: 평일 10:00 - 18:00</li>
-            <li>카카오톡 채널: @royalpaw_kr</li>
-            <li>서울특별시 강남구 도산대로 로열빌딩 4F</li>
+            <li>운영시간: 평일 10:00 - 17:00</li>
+            <li>점심시간: 12:30 - 13:30</li>
+            <li>이메일: care@royalpaw.kr</li>
           </ul>
         </div>
       </div>
       <div class="footer-bottom">
         <span>© 2026 ROYAL PAW Inc. All rights reserved.</span>
-        <span>Supabase Connected · Relative Assets: <code>img/</code></span>
+        <span>Powered by Supabase Database &amp; Auth</span>
       </div>
     </div>
   </footer>
 
-  <div class="drawer-backdrop" id="drawerBackdrop" onclick="closeCart()"></div>
+  <!-- 장바구니 드로어 -->
+  <div class="drawer-backdrop" id="cartBackdrop" onclick="closeCart()"></div>
   <aside class="cart-drawer" id="cartDrawer">
     <div class="drawer-header">
-      <h3>🛒 장바구니</h3>
+      <h3>🛒 로열 쇼핑백 (<span id="drawerCount">0</span>)</h3>
       <button class="close-btn" onclick="closeCart()">✕</button>
     </div>
     <div class="shipping-bar" id="shippingBar"></div>
@@ -1236,26 +1234,26 @@
         <span id="cartShipping">0원</span>
       </div>
       <div class="summary-row">
-        <span>예상 적립 포인트 (<span id="cartTierRate">2%</span>)</span>
+        <span>예상 적립 포인트</span>
         <span id="cartEarnPoints" style="color:var(--gold-light); font-weight:700;">+0P</span>
       </div>
       <div class="summary-row total">
-        <span>결제 예정 금액</span>
+        <span>총 결제 예정 금액</span>
         <span id="cartTotal">0원</span>
       </div>
-      <button class="btn-nav btn-gold" style="width:100%; padding:14px; font-size:0.98rem;" onclick="openCheckout()">
+      <button class="btn-nav btn-gold" style="width:100%; padding:14px; font-size:0.96rem;" onclick="openCheckoutModal()">
         주문 및 결제하기
       </button>
     </div>
   </aside>
 
+  <!-- 로그인 / 회원가입 모달 -->
   <div class="modal-overlay" id="authModal">
     <div class="modal-box">
       <div class="modal-head">
-        <h3 id="authModalTitle">로열포우 멤버십 로그인</h3>
+        <h3 id="authModalTitle">👑 로열포우 멤버십 로그인</h3>
         <button class="close-btn" onclick="closeModal('authModal')">✕</button>
       </div>
-
       <div class="tab-switch">
         <button id="tabLogin" class="active" onclick="switchAuthTab('login')">로그인</button>
         <button id="tabSignup" onclick="switchAuthTab('signup')">회원가입 (+3,000P)</button>
@@ -1263,386 +1261,367 @@
 
       <form id="loginForm" onsubmit="handleLogin(event)">
         <div class="form-group">
-          <label>이메일 아이디</label>
-          <input type="email" class="form-input" id="loginEmail" placeholder="royal@cat.kr" required />
+          <label>이메일 주소</label>
+          <input type="email" id="loginEmail" class="form-input" placeholder="example@email.com" required />
         </div>
         <div class="form-group">
           <label>비밀번호</label>
-          <input type="password" class="form-input" id="loginPw" placeholder="비밀번호 입력" required />
+          <input type="password" id="loginPassword" class="form-input" placeholder="비밀번호를 입력하세요" required />
         </div>
-        <button type="submit" class="btn-nav btn-royal" style="width:100%; padding:13px; margin-top:6px;">로그인하기</button>
+        <button type="submit" class="btn-nav btn-royal" style="width:100%; padding:13px; margin-top:6px;">
+          로그인하기
+        </button>
       </form>
 
       <form id="signupForm" style="display:none;" onsubmit="handleSignup(event)">
         <div class="form-group">
-          <label>보호자 성함</label>
-          <input type="text" class="form-input" id="signupName" placeholder="예: 김집사" required />
+          <label>이름 (보호자 성함)</label>
+          <input type="text" id="signupName" class="form-input" placeholder="홍길동" required />
         </div>
         <div class="form-group">
           <label>연락처</label>
-          <input type="tel" class="form-input" id="signupPhone" placeholder="010-1234-5678" required />
+          <input type="tel" id="signupPhone" class="form-input" placeholder="010-1234-5678" required />
         </div>
         <div class="form-group">
-          <label>반려묘 이름 (맞춤 케어 등록)</label>
-          <input type="text" class="form-input" id="signupCatName" placeholder="예: 치즈 / 루나" required />
+          <label>이메일 주소</label>
+          <input type="email" id="signupEmail" class="form-input" placeholder="example@email.com" required />
         </div>
         <div class="form-group">
-          <label>이메일 아이디</label>
-          <input type="email" class="form-input" id="signupEmail" placeholder="example@royalpaw.kr" required />
-        </div>
-        <div class="form-group">
-          <label>비밀번호</label>
-          <input type="password" class="form-input" id="signupPw" placeholder="6자 이상 입력" minlength="6" required />
+          <label>비밀번호 (6자 이상)</label>
+          <input type="password" id="signupPassword" class="form-input" minlength="6" placeholder="6자 이상 입력" required />
         </div>
         <button type="submit" class="btn-nav btn-gold" style="width:100%; padding:13px; margin-top:6px;">
-          가입 완료하고 3,000P 즉시 받기
+          가입하고 3,000P 즉시 받기
         </button>
       </form>
     </div>
   </div>
 
+  <!-- 결제 모달 -->
   <div class="modal-overlay" id="checkoutModal">
-    <div class="modal-box" style="max-width:580px;">
+    <div class="modal-box">
       <div class="modal-head">
-        <h3>💳 주문서 작성 및 결제</h3>
+        <h3>💳 로열포우 주문 / 결제</h3>
         <button class="close-btn" onclick="closeModal('checkoutModal')">✕</button>
       </div>
 
-      <form id="checkoutForm" onsubmit="processPayment(event)">
+      <div id="checkoutContent">
         <div class="form-group">
-          <label>받는 분 성함</label>
-          <input type="text" class="form-input" id="orderReceiver" required />
+          <label>수령인 성함</label>
+          <input type="text" id="orderReceiver" class="form-input" required />
         </div>
         <div class="form-group">
-          <label>연락처</label>
-          <input type="tel" class="form-input" id="orderPhone" value="010-1234-5678" required />
+          <label>수령인 연락처</label>
+          <input type="tel" id="orderPhone" class="form-input" required />
         </div>
         <div class="form-group">
           <label>배송지 주소</label>
-          <input type="text" class="form-input" id="orderAddress" value="서울특별시 강남구 도산대로 123, 로열캐슬 101호" required />
+          <input type="text" id="orderAddress" class="form-input" placeholder="도로명 주소 및 상세 주소를 입력하세요" required />
         </div>
 
-        <div class="point-box" id="checkoutPointSection"></div>
-
-        <div class="form-group">
-          <label>결제 수단 선택</label>
-          <div class="pay-methods" id="payMethods">
-            <button type="button" class="pay-method-btn active" onclick="selectPayMethod(this, '신용/체크카드')">💳 신용/체크카드</button>
-            <button type="button" class="pay-method-btn" onclick="selectPayMethod(this, '로열페이 간편결제')">⚡ 로열페이</button>
-            <button type="button" class="pay-method-btn" onclick="selectPayMethod(this, '무통장입금')">🏦 무통장입금</button>
+        <div class="point-box">
+          <div style="display:flex; justify-content:space-between; font-size:0.84rem; margin-bottom:8px;">
+            <span>보유 로열 포인트</span>
+            <strong id="availPointsText" style="color:var(--gold-light);">0P</strong>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <input type="number" id="usePointsInput" class="form-input" min="0" value="0" oninput="updateCheckoutSummary()" />
+            <button type="button" class="btn-nav btn-outline" style="white-space:nowrap;" onclick="useAllPoints()">전액 사용</button>
           </div>
         </div>
 
-        <div style="background:var(--bg-dark); padding:16px; border-radius:12px; border:1px solid var(--border-subtle); margin-bottom:18px;">
-          <div class="summary-row"><span>주문 상품 금액</span><span id="paySub">0원</span></div>
-          <div class="summary-row"><span>배송비</span><span id="payShip">0원</span></div>
-          <div class="summary-row" style="color:var(--coral);"><span>포인트 할인 적용</span><span id="payPointDisc">-0원</span></div>
-          <div class="summary-row" style="color:var(--gold-light);"><span>결제 후 적립 예정 포인트</span><span id="payEarn">+0P</span></div>
-          <div class="summary-row total" style="margin-bottom:0;">
-            <span>최종 결제 금액</span>
-            <span id="payFinal" style="color:var(--gold-light);">0원</span>
-          </div>
+        <label style="display:block; font-size:0.82rem; font-weight:600; color:var(--text-sub); margin-bottom:8px;">결제 수단</label>
+        <div class="pay-methods">
+          <button type="button" class="pay-method-btn active" onclick="selectPayMethod(this, '신용/체크카드')">💳 카드결제</button>
+          <button type="button" class="pay-method-btn" onclick="selectPayMethod(this, '카카오페이')">💛 카카오페이</button>
+          <button type="button" class="pay-method-btn" onclick="selectPayMethod(this, '네이버페이')">💚 네이버페이</button>
         </div>
 
-        <button type="submit" class="btn-nav btn-gold" id="paySubmitBtn" style="width:100%; padding:15px; font-size:1rem;">
-          결제하기
+        <div style="background:var(--bg-dark); padding:16px; border-radius:12px; border:1px solid var(--border-subtle); margin-bottom:16px;">
+          <div class="summary-row"><span>주문 상품 금액</span><span id="chkSub">0원</span></div>
+          <div class="summary-row"><span>배송비</span><span id="chkShip">0원</span></div>
+          <div class="summary-row"><span>포인트 사용 할인</span><span id="chkPointUse" style="color:var(--coral);">-0원</span></div>
+          <div class="summary-row"><span>결제 후 적립 예정</span><span id="chkPointEarn" style="color:var(--emerald);">+0P</span></div>
+          <div class="summary-row total" style="margin-bottom:0;"><span>최종 결제 금액</span><span id="chkFinal" style="color:var(--gold-light);">0원</span></div>
+        </div>
+
+        <button type="button" id="submitOrderBtn" class="btn-nav btn-gold" style="width:100%; padding:14px; font-size:0.98rem;" onclick="submitOrder()">
+          결제 완료하기
         </button>
-      </form>
+      </div>
     </div>
   </div>
 
-  <div class="modal-overlay" id="productModal">
-    <div class="modal-box" style="max-width:660px;" id="productModalContent"></div>
+  <!-- 마이페이지 모달 -->
+  <div class="modal-overlay" id="myPageModal">
+    <div class="modal-box" style="max-width:640px;">
+      <div class="modal-head">
+        <h3>👑 나의 로열 멤버십 &amp; 주문 내역</h3>
+        <button class="close-btn" onclick="closeModal('myPageModal')">✕</button>
+      </div>
+      <div id="myPageBody"></div>
+    </div>
   </div>
 
-  <div class="modal-overlay" id="mypageModal">
-    <div class="modal-box" style="max-width:620px;" id="mypageContent"></div>
+  <!-- 상품 상세 모달 -->
+  <div class="modal-overlay" id="detailModal">
+    <div class="modal-box" style="max-width:600px;">
+      <div class="modal-head">
+        <h3 id="detailTitle">상품 상세 정보</h3>
+        <button class="close-btn" onclick="closeModal('detailModal')">✕</button>
+      </div>
+      <div id="detailBody"></div>
+    </div>
   </div>
 
   <div class="toast-container" id="toastContainer"></div>
 
   <script>
+    // =========================================================
+    // 1. Supabase 클라이언트 연결 설정
+    // =========================================================
     const SUPABASE_URL = 'https://mqpupnfyirddngtbeviw.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_TfdLuR8tkmpnkUXPXNIl4A_N5AoSfT-';
-    const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const SUPABASE_KEY = 'sb_publishable_TfdLuR8tkmpnkUXPXNIl4A_N5AoSfT-';
+    const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // =========================================================
+    // 2. 전역 상태 및 기본 데이터
+    // =========================================================
+    let currentUser = null;     // Supabase Auth User
+    let currentProfile = null;  // shop_profiles row
+    let products = [];          // shop_products rows
+    let cart = JSON.parse(localStorage.getItem('royalpaw_cart') || '[]');
+    let wishlist = JSON.parse(localStorage.getItem('royalpaw_wish') || '[]');
+    let activeCategory = 'all';
+    let selectedPayMethod = '신용/체크카드';
+
+    const GRADE_RATES = {
+      WELCOME: 0.03,
+      SILVER: 0.05,
+      GOLD: 0.07,
+      VIP: 0.10
+    };
 
     const HERO_SLIDES = [
       {
-        tag: "ROYAL ARCHITECTURE · 2026 NEW",
-        title: "고양이의 시선이 머무는<br><span>로열 원목 캣타워</span>",
-        desc: "흔들림 없는 35mm 자작나무 설계와 파노라마 전망대. 우리 집 거실이 고양이만의 프리미엄 성이 됩니다.",
-        img: "img/hero-1.jpg",
-        thumbTitle: "원목 캣타워",
-        ctaText: "캣타워 컬렉션 보기",
-        ctaAction: () => filterAndScroll('tower')
+        num: '01',
+        label: '로열 아키텍트 캣타워',
+        tag: 'SIGNATURE ARCHITECTURE',
+        title: '대형묘도 흔들림 없는<br><span>5단 원목 스카이 타워</span>',
+        desc: '35mm 고밀도 자작나무 합판과 파노라마 아크릴 해먹으로 완성한 고양이만의 프리미엄 성채를 경험하세요.',
+        img: 'img/hero-1.jpg',
+        cat: 'tower'
       },
       {
-        tag: "GOURMET FREEZE-DRIED",
-        title: "노르웨이 생연어 그대로<br><span>동결건조 고메 트릿</span>",
-        desc: "영하 40℃ 급속 동결건조로 살아있는 육즙과 풍부한 타우린. 입맛 까다로운 고양이도 단번에 반하는 미식 간식.",
-        img: "img/hero-2.jpg",
-        thumbTitle: "고메 생연어 간식",
-        ctaText: "프리미엄 간식 보기",
-        ctaAction: () => filterAndScroll('treats')
+        num: '02',
+        label: '영하 40℃ 고메 간식',
+        tag: 'HUMAN-GRADE GOURMET',
+        title: '생원육의 영양 그대로<br><span>동결건조 수제 트릿</span>',
+        desc: '첨가물 0%, 영하 40℃ 급속 동결건조 공법으로 원재료 본연의 풍미와 영양소를 98% 보존했습니다.',
+        img: 'img/hero-2.jpg',
+        cat: 'treat'
       },
       {
-        tag: "INTERACTIVE PLAY STUDIO",
-        title: "사냥 본능을 깨우는<br><span>로열 페더 &amp; 우드 퍼즐</span>",
-        desc: "천연 공작 깃털 완드와 간식 노즈워크 원목 퍼즐로 매일 15분, 반려묘의 스트레스 해소와 활력을 선물하세요.",
-        img: "img/hero-3.jpg",
-        thumbTitle: "플레이 & 토이",
-        ctaText: "리빙·장난감 보기",
-        ctaAction: () => filterAndScroll('living')
-      },
-      {
-        tag: "ROYAL PAW MEMBERSHIP",
-        title: "구매할수록 커지는<br><span>최대 10% 포인트 리워드</span>",
-        desc: "지금 무료 회원가입하면 즉시 사용 가능한 3,000P 증정! 아기고양이부터 엠퍼러캣까지 등급별 특권을 누리세요.",
-        img: "img/hero-4.jpg",
-        thumbTitle: "멤버십 포인트 혜택",
-        ctaText: "회원가입하고 3,000P 받기",
-        ctaAction: () => openAuthModal('signup')
+        num: '03',
+        label: '로열 멤버십 10% 적립',
+        tag: 'ROYAL LOYALTY CLUB',
+        title: '가입 즉시 3,000P 지급<br><span>최대 10% 로열 포인트</span>',
+        desc: '구매할수록 높아지는 멤버십 등급 혜택과 전 상품 무료배송 특전을 지금 바로 만나보세요.',
+        img: 'img/hero-3.jpg',
+        cat: 'all'
       }
     ];
 
-    const TIERS = [
-      { id: "WELCOME", name: "아기고양이", icon: "🐾", minSpend: 0, rate: 0.02, freeShipMin: 50000 },
-      { id: "SILVER", name: "실버캣", icon: "🥈", minSpend: 100000, rate: 0.04, freeShipMin: 30000 },
-      { id: "GOLD", name: "로열캣", icon: "👑", minSpend: 300000, rate: 0.07, freeShipMin: 0 },
-      { id: "VIP", name: "엠퍼러캣", icon: "💎", minSpend: 600000, rate: 0.10, freeShipMin: 0 }
+    // DB 이미지 컬럼이 없을 때 상품명/카테고리 기반으로 매칭할 기본 이미지 풀
+    const FALLBACK_IMAGES = [
+      'img/hero-1.jpg',
+      'img/hero-2.jpg',
+      'img/hero-3.jpg'
     ];
 
-    const FALLBACK_PRODUCTS = [
-      {
-        id: 1,
-        name: "로열 아키텍트 5단 원목 캣타워",
-        category: "tower",
-        catLabel: "캣타워",
-        badge: "BEST",
-        price: 289000,
-        origPrice: 340000,
-        img: "img/hero-1.jpg",
-        desc: "고밀도 자작나무 합판 & 투명 아크릴 해먹이 결합된 플래그십 5단 캣타워",
-        detail: "높이 172cm, 하중 25kg까지 안정적으로 지지하는 저중심 설계 캣타워입니다. 분리 세탁 가능한 로열 블루 벨벳 방석이 기본 포함됩니다."
-      },
-      {
-        id: 2,
-        name: "노르웨이 생연어 동결건조 트릿 (150g)",
-        category: "treats",
-        catLabel: "프리미엄 간식",
-        badge: "인기 1위",
-        price: 18900,
-        origPrice: 23000,
-        img: "img/hero-2.jpg",
-        desc: "첨가물 0% 휴먼그레이드 노르웨이산 생연어 100% 큐브 트릿",
-        detail: "생연어 필렛을 영하 40도에서 동결건조하여 피모 윤기와 오메가3 보충에 탁월합니다. 물에 불려 급여하면 음수량 증가에도 도움을 줍니다."
-      },
-      {
-        id: 3,
-        name: "사파이어 벨벳 오소페딕 캣베드",
-        category: "living",
-        catLabel: "리빙",
-        badge: "NEW",
-        price: 68000,
-        origPrice: 82000,
-        img: "img/hero-3.jpg",
-        desc: "고밀도 메모리폼과 발수 로열블루 벨벳으로 완성한 숙면 방석",
-        detail: "관절 부담을 줄여주는 인체공학적 볼스터 쿠션과 골드 파이핑 디테일이 돋보이는 럭셔리 캣베드입니다."
-      },
-      {
-        id: 4,
-        name: "프렌치 닭가슴살 & 캣닢 퓨레 스틱 (30입)",
-        category: "treats",
-        catLabel: "프리미엄 간식",
-        badge: "재구매율 94%",
-        price: 21500,
-        origPrice: 26000,
-        img: "img/hero-2.jpg",
-        desc: "무항생제 국내산 닭가슴살과 유기농 캣닢을 블렌딩한 고단백 짜먹는 간식",
-        detail: "나트륨 함량을 최소화하고 타우린과 프락토올리고당을 더해 매일 급여해도 부담 없는 데일리 퓨레입니다."
-      },
-      {
-        id: 5,
-        name: "더블 깃털 낚시대 & 원목 노즈워크 퍼즐",
-        category: "living",
-        catLabel: "장난감",
-        badge: "추천",
-        price: 32000,
-        origPrice: 39000,
-        img: "img/hero-3.jpg",
-        desc: "천연 깃털 리필 3종과 8홀 원목 간식 퍼즐 박스 세트",
-        detail: "사냥 본능 자극과 두뇌 활동을 동시에 충족시켜 실내 반려묘의 비만 예방과 스트레스 해소에 효과적입니다."
-      },
-      {
-        id: 6,
-        name: "스카이 브릿지 천장고정형 원목 캣폴",
-        category: "tower",
-        catLabel: "캣폴",
-        badge: "공간절약",
-        price: 198000,
-        origPrice: 245000,
-        img: "img/hero-1.jpg",
-        desc: "좁은 공간에도 설치 가능한 슬림 수직형 캣폴 & 360도 회전 발판",
-        detail: "천장 높이 225~265cm까지 맞춤 조절 가능하며, 100% 천연 면로프 스크래처 기둥이 전 구간 적용되었습니다."
-      },
-      {
-        id: 7,
-        name: "헤어볼 케어 & 유산균 덴탈 크런치 (200g)",
-        category: "treats",
-        catLabel: "기능성 간식",
-        badge: "헬스케어",
-        price: 16500,
-        origPrice: 20000,
-        img: "img/hero-2.jpg",
-        desc: "식이섬유와 17종 유산균이 함유된 바삭한 치석 케어 기능성 트릿",
-        detail: "그루밍이 잦은 장모종 및 실내묘의 헤어볼 배출을 돕고 씹는 과정에서 플라그 형성을 완화합니다."
-      },
-      {
-        id: 8,
-        name: "로열 골드 웨이브 소파 스크래처",
-        category: "living",
-        catLabel: "스크래처",
-        badge: "BEST",
-        price: 44000,
-        origPrice: 54000,
-        img: "img/hero-4.jpg",
-        desc: "먼지 날림 없는 고강도 친환경 골판지 & 로열블루 사이드 패널",
-        detail: "고양이 척추 곡선에 맞춘 인체공학적 S라인 설계로 스크래칭과 낮잠을 동시에 즐길 수 있습니다."
-      }
-    ];
-
-    let PRODUCTS = [...FALLBACK_PRODUCTS];
-    let state = {
-      user: null,
-      profile: null,
-      cart: JSON.parse(localStorage.getItem('rp_cart')) || [{ id: 2, qty: 2 }],
-      wishlist: JSON.parse(localStorage.getItem('rp_wish')) || [1],
-      orders: [],
-      pointHistory: [],
-      currentSlide: 0,
-      currentCategory: 'all',
-      selectedPayMethod: '신용/체크카드'
-    };
-
-    function saveLocalCartWish() {
-      localStorage.setItem('rp_cart', JSON.stringify(state.cart));
-      localStorage.setItem('rp_wish', JSON.stringify(state.wishlist));
+    function getProductImage(product, index = 0) {
+      if (product.image_url) return product.image_url;
+      if (product.img) return product.img;
+      const name = (product.name || '').toLowerCase();
+      const cat = (product.category || '').toLowerCase();
+      if (name.includes('타워') || cat.includes('tower') || cat.includes('캣타워')) return 'img/hero-1.jpg';
+      if (name.includes('간식') || name.includes('연어') || name.includes('트릿') || cat.includes('treat') || cat.includes('간식')) return 'img/hero-2.jpg';
+      return FALLBACK_IMAGES[index % FALLBACK_IMAGES.length];
     }
 
-    function normalizeCategory(rawCat) {
-      const val = (rawCat || '').toLowerCase();
-      if (val.includes('tower') || val.includes('캣타워') || val.includes('캣폴') || val.includes('분류1')) return 'tower';
-      if (val.includes('treat') || val.includes('간식') || val.includes('분류2')) return 'treats';
-      if (val.includes('living') || val.includes('리빙') || val.includes('장난감') || val.includes('스크래처') || val.includes('분류3')) return 'living';
-      return 'treats';
-    }
-
-    function mapDbProduct(row, idx) {
-      const cat = normalizeCategory(row.category);
-      const defaultImg = cat === 'tower' ? 'img/hero-1.jpg' : cat === 'living' ? 'img/hero-3.jpg' : 'img/hero-2.jpg';
-      const price = Number(row.price) || 15000;
-      return {
-        id: row.id ?? (idx + 1),
-        name: row.name || `로열포우 상품 #${idx + 1}`,
-        category: cat,
-        catLabel: row.category || (cat === 'tower' ? '캣타워' : cat === 'living' ? '리빙·토이' : '프리미엄 간식'),
-        badge: row.badge || 'ROYAL',
-        price,
-        origPrice: Number(row.orig_price) || Math.round(price * 1.2),
-        img: row.image_url || row.img || defaultImg,
-        desc: row.description || row.desc || '로열포우 프리미엄 컬렉션 상품',
-        detail: row.detail || row.description || '엄선된 소재로 제작된 로열포우 공식 상품입니다.',
-        stock: row.stock ?? 99
-      };
-    }
-
-    async function loadProductsFromSupabase() {
-      try {
-        const { data, error } = await db
-          .from('shop_products')
-          .select('*')
-          .order('id', { ascending: true });
-        if (!error && Array.isArray(data) && data.length > 0) {
-          PRODUCTS = data.map(mapDbProduct);
-        }
-      } catch (err) {
-        console.warn('shop_products 조회 폴백 사용:', err);
-      }
-    }
-
-    function getTierByGrade(grade) {
-      return TIERS.find(t => t.id === (grade || 'WELCOME').toUpperCase()) || TIERS[0];
-    }
-
-    function getCurrentUserTier() {
-      if (!state.profile) return TIERS[0];
-      return getTierByGrade(state.profile.grade);
-    }
-
-    function formatWon(num) {
+    function formatPrice(num) {
       return Number(num || 0).toLocaleString('ko-KR') + '원';
     }
 
-    // Auth & Profile
-    async function syncAuthState() {
-      const { data: { session } } = await db.auth.getSession();
-      state.user = session?.user || null;
-      if (state.user) {
-        await loadUserProfileAndOrders(state.user);
-      } else {
-        state.profile = null;
-        state.orders = [];
-        state.pointHistory = [];
-      }
-      refreshAll();
+    function showToast(msg) {
+      const container = document.getElementById('toastContainer');
+      const el = document.createElement('div');
+      el.className = 'toast';
+      el.textContent = msg;
+      container.appendChild(el);
+      setTimeout(() => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(10px)';
+        setTimeout(() => el.remove(), 250);
+      }, 3000);
     }
 
-    async function loadUserProfileAndOrders(authUser) {
-      try {
-        let { data: prof } = await db
-          .from('shop_profiles')
-          .select('*')
-          .eq('id', authUser.id)
-          .single();
+    // =========================================================
+    // 3. 히어로 슬라이더
+    // =========================================================
+    let currentSlide = 0;
+    let slideProgress = 0;
+    let slideTimer = null;
 
-        if (!prof) {
-          const meta = authUser.user_metadata || {};
-          const insertPayload = {
-            id: authUser.id,
-            email: authUser.email,
-            name: meta.name || authUser.email?.split('@')[0] || '집사님',
-            phone: meta.phone || '',
-            grade: 'WELCOME',
-            points: 3000,
-            role: 'member'
-          };
-          const { data: created } = await db
-            .from('shop_profiles')
-            .upsert(insertPayload, { onConflict: 'id' })
-            .select()
-            .single();
-          prof = created || insertPayload;
+    function initHero() {
+      const slidesEl = document.getElementById('heroSlides');
+      const thumbsEl = document.getElementById('heroThumbs');
+
+      slidesEl.innerHTML = HERO_SLIDES.map((s, idx) => `
+        <div class="hero-slide ${idx === 0 ? 'active' : ''}">
+          <img src="${s.img}" alt="${s.label}" class="hero-bg-img" onerror="this.style.display='none'">
+          <div class="hero-overlay"></div>
+          <div class="container">
+            <div class="hero-content">
+              <div class="hero-tag">✦ ${s.tag}</div>
+              <h1 class="hero-title">${s.title}</h1>
+              <p class="hero-desc">${s.desc}</p>
+              <div class="hero-cta-group">
+                <button class="hero-btn btn-gold" onclick="filterAndScroll('${s.cat}')">컬렉션 살펴보기 →</button>
+                <a href="#membership" class="hero-btn btn-outline">멤버십 혜택 보기</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      thumbsEl.innerHTML = HERO_SLIDES.map((s, idx) => `
+        <button class="hero-thumb ${idx === 0 ? 'active' : ''}" onclick="goSlide(${idx})">
+          <span class="hero-thumb-num">${s.num}</span>
+          <span class="hero-thumb-label">${s.label}</span>
+        </button>
+      `).join('');
+
+      startSlideTimer();
+    }
+
+    function goSlide(idx) {
+      const slides = document.querySelectorAll('.hero-slide');
+      const thumbs = document.querySelectorAll('.hero-thumb');
+      currentSlide = (idx + slides.length) % slides.length;
+      slides.forEach((el, i) => el.classList.toggle('active', i === currentSlide));
+      thumbs.forEach((el, i) => el.classList.toggle('active', i === currentSlide));
+      slideProgress = 0;
+    }
+
+    function changeSlide(dir) {
+      goSlide(currentSlide + dir);
+    }
+
+    function startSlideTimer() {
+      if (slideTimer) clearInterval(slideTimer);
+      slideTimer = setInterval(() => {
+        slideProgress += 2;
+        const bar = document.getElementById('heroProgressBar');
+        if (bar) bar.style.width = slideProgress + '%';
+        if (slideProgress >= 100) {
+          goSlide(currentSlide + 1);
         }
+      }, 100);
+    }
 
-        state.profile = prof;
-
-        const { data: ordersData } = await db
-          .from('shop_orders')
-          .select('*')
-          .eq('user_id', authUser.id)
-          .order('created_at', { ascending: false });
-
-        state.orders = Array.isArray(ordersData) ? ordersData : [];
-        state.pointHistory = [
-          {
-            date: new Date().toLocaleDateString('ko-KR'),
-            desc: `현재 보유 포인트 (${prof.grade || 'WELCOME'} 등급)`,
-            amount: Number(prof.points || 0)
-          }
-        ];
-      } catch (err) {
-        console.warn('프로필/주문 조회 오류:', err);
+    // =========================================================
+    // 4. Supabase Auth & shop_profiles 연동
+    // =========================================================
+    async function initAuth() {
+      const { data: { session } } = await db.auth.getSession();
+      if (session?.user) {
+        currentUser = session.user;
+        await fetchUserProfile();
+      } else {
+        currentUser = null;
+        currentProfile = null;
       }
+      renderNavActions();
+      highlightCurrentTier();
+      renderProducts();
+      updateCartUI();
+
+      db.auth.onAuthStateChange(async (_event, session) => {
+        if (session?.user) {
+          currentUser = session.user;
+          await fetchUserProfile();
+        } else {
+          currentUser = null;
+          currentProfile = null;
+        }
+        renderNavActions();
+        highlightCurrentTier();
+        renderProducts();
+        updateCartUI();
+      });
+    }
+
+    async function fetchUserProfile() {
+      if (!currentUser) return;
+      const { data, error } = await db
+        .from('shop_profiles')
+        .select('*')
+        .eq('id', currentUser.id)
+        .single();
+
+      if (!error && data) {
+        currentProfile = data;
+      } else {
+        // 트리거가 아직 반영되지 않았거나 프로필이 없는 경우 대비 기본 객체 구성
+        currentProfile = {
+          id: currentUser.id,
+          email: currentUser.email,
+          name: currentUser.user_metadata?.name || currentUser.email.split('@')[0],
+          phone: currentUser.user_metadata?.phone || '',
+          grade: 'WELCOME',
+          points: 3000,
+          role: 'member'
+        };
+      }
+    }
+
+    function renderNavActions() {
+      const nav = document.getElementById('navActions');
+      const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+
+      if (currentUser && currentProfile) {
+        const isAdmin = currentProfile.role === 'admin';
+        nav.innerHTML = `
+          <div class="member-pill" onclick="openMyPage()" title="마이페이지 열기">
+            <span class="tier-dot">${currentProfile.grade}</span>
+            <strong>${currentProfile.name || '회원'}님</strong>
+            <span style="color:var(--gold-light); font-weight:700;">${Number(currentProfile.points || 0).toLocaleString()}P</span>
+          </div>
+          ${isAdmin ? `<a href="admin.html" class="btn-nav btn-outline" style="border-color:var(--emerald); color:var(--emerald);">⚙️ 관리자</a>` : ''}
+          <button class="btn-nav btn-outline" onclick="handleLogout()">로그아웃</button>
+          <button class="cart-trigger" onclick="openCart()">
+            🛍️ 쇼핑백 <span class="cart-badge">${totalQty}</span>
+          </button>
+        `;
+      } else {
+        nav.innerHTML = `
+          <button class="btn-nav btn-outline" onclick="openAuthModal('login')">로그인</button>
+          <button class="btn-nav btn-gold" onclick="openAuthModal('signup')">회원가입 (+3,000P)</button>
+          <button class="cart-trigger" onclick="openCart()">
+            🛍️ 쇼핑백 <span class="cart-badge">${totalQty}</span>
+          </button>
+        `;
+      }
+    }
+
+    function highlightCurrentTier() {
+      document.querySelectorAll('.tier-card').forEach(card => {
+        card.classList.remove('current-tier-highlight');
+        if (currentProfile && card.dataset.grade === currentProfile.grade) {
+          card.classList.add('current-tier-highlight');
+        }
+      });
     }
 
     function openAuthModal(tab = 'login') {
@@ -1657,241 +1636,198 @@
       document.getElementById('loginForm').style.display = isLogin ? 'block' : 'none';
       document.getElementById('signupForm').style.display = isLogin ? 'none' : 'block';
       document.getElementById('authModalTitle').textContent = isLogin
-        ? '로열포우 멤버십 로그인'
-        : '신규 회원가입 · 즉시 3,000P 지급';
+        ? '👑 로열포우 멤버십 로그인'
+        : '👑 로열포우 신규 회원가입';
     }
 
     async function handleSignup(e) {
       e.preventDefault();
       const name = document.getElementById('signupName').value.trim();
       const phone = document.getElementById('signupPhone').value.trim();
-      const catName = document.getElementById('signupCatName').value.trim();
       const email = document.getElementById('signupEmail').value.trim();
-      const password = document.getElementById('signupPw').value;
+      const password = document.getElementById('signupPassword').value;
 
       const { data, error } = await db.auth.signUp({
         email,
         password,
         options: {
-          data: { name, phone, cat_name: catName }
+          data: { name, phone }
         }
       });
 
       if (error) {
-        showToast('❌ 회원가입 실패: ' + error.message);
+        showToast('회원가입 오류: ' + error.message);
         return;
       }
 
-      if (data.user) {
+      // shop_profiles에 이름과 연락처가 확실히 저장되도록 upsert/update 보조 실행
+      if (data?.user) {
         await db.from('shop_profiles').upsert({
           id: data.user.id,
           email,
           name,
-          phone,
-          grade: 'WELCOME',
-          points: 3000,
-          role: 'member'
+          phone
         }, { onConflict: 'id' });
       }
 
       closeModal('authModal');
-      await syncAuthState();
-      showToast(`🎉 ${name}님 회원가입 완료! DB에 회원 정보가 등록되었습니다.`);
+      document.getElementById('signupForm').reset();
+      showToast(`🎉 ${name}님 환영합니다! 가입 축하 3,000P가 지급되었습니다.`);
     }
 
     async function handleLogin(e) {
       e.preventDefault();
       const email = document.getElementById('loginEmail').value.trim();
-      const password = document.getElementById('loginPw').value;
+      const password = document.getElementById('loginPassword').value;
 
       const { error } = await db.auth.signInWithPassword({ email, password });
+
       if (error) {
-        showToast('❌ 로그인 실패: ' + error.message);
+        showToast('로그인 실패: ' + error.message);
         return;
       }
 
       closeModal('authModal');
-      await syncAuthState();
-      showToast('👑 로열포우에 로그인되었습니다!');
+      document.getElementById('loginForm').reset();
+      showToast('👑 로열포우에 오신 것을 환영합니다!');
     }
 
-    async function logout() {
+    async function handleLogout() {
       await db.auth.signOut();
-      state.user = null;
-      state.profile = null;
-      state.orders = [];
-      refreshAll();
-      showToast('로그아웃되었습니다.');
+      showToast('안전하게 로그아웃되었습니다.');
     }
 
-    // Hero Slider
-    let slideTimer = null;
-    let progressVal = 0;
+    // =========================================================
+    // 5. 상품 목록 조회 (shop_products)
+    // =========================================================
+    async function loadProducts() {
+      const grid = document.getElementById('productGrid');
+      const { data, error } = await db
+        .from('shop_products')
+        .select('*')
+        .order('id', { ascending: true });
 
-    function initHeroSlider() {
-      const slidesEl = document.getElementById('heroSlides');
-      const thumbsEl = document.getElementById('heroThumbs');
-
-      slidesEl.innerHTML = HERO_SLIDES.map((s, idx) => `
-        <div class="hero-slide ${idx === 0 ? 'active' : ''}" data-idx="${idx}">
-          <img class="hero-bg-img" src="${s.img}" alt="${s.thumbTitle}" />
-          <div class="hero-overlay"></div>
-          <div class="container">
-            <div class="hero-content">
-              <div class="hero-tag">✦ ${s.tag}</div>
-              <h1 class="hero-title">${s.title}</h1>
-              <p class="hero-desc">${s.desc}</p>
-              <div class="hero-cta-group">
-                <button class="hero-btn btn-gold" onclick="HERO_SLIDES[${idx}].ctaAction()">${s.ctaText} →</button>
-                <a href="#membership" class="hero-btn btn-outline">등급별 포인트 혜택</a>
-              </div>
-            </div>
+      if (error) {
+        grid.innerHTML = `
+          <div style="grid-column:1/-1; text-align:center; padding:50px; color:var(--coral);">
+            상품을 불러오지 못했습니다: ${error.message}
           </div>
-        </div>
-      `).join('');
-
-      thumbsEl.innerHTML = HERO_SLIDES.map((s, idx) => `
-        <button class="hero-thumb ${idx === 0 ? 'active' : ''}" onclick="goToSlide(${idx})">
-          <span class="hero-thumb-num">0${idx + 1}</span>
-          <span class="hero-thumb-label">${s.thumbTitle}</span>
-        </button>
-      `).join('');
-
-      startSlideAutoplay();
-    }
-
-    function goToSlide(index) {
-      state.currentSlide = (index + HERO_SLIDES.length) % HERO_SLIDES.length;
-      document.querySelectorAll('.hero-slide').forEach((el, i) => {
-        el.classList.toggle('active', i === state.currentSlide);
-      });
-      document.querySelectorAll('.hero-thumb').forEach((el, i) => {
-        el.classList.toggle('active', i === state.currentSlide);
-      });
-      progressVal = 0;
-    }
-
-    function changeSlide(step) { goToSlide(state.currentSlide + step); }
-
-    function startSlideAutoplay() {
-      if (slideTimer) clearInterval(slideTimer);
-      slideTimer = setInterval(() => {
-        progressVal += 2;
-        const bar = document.getElementById('heroProgressBar');
-        if (bar) bar.style.width = progressVal + '%';
-        if (progressVal >= 100) changeSlide(1);
-      }, 100);
-    }
-
-    // Nav
-    function renderNav() {
-      const navEl = document.getElementById('navActions');
-      const totalItems = state.cart.reduce((sum, item) => sum + item.qty, 0);
-
-      if (state.user && state.profile) {
-        const tier = getCurrentUserTier();
-        const pts = Number(state.profile.points || 0);
-        const isAdmin = state.profile.role === 'admin';
-        navEl.innerHTML = `
-          <button class="member-pill" onclick="openMyPage()" title="마이페이지 및 주문/포인트 조회">
-            <span class="tier-dot">${tier.icon} ${tier.name}</span>
-            <span><strong>${state.profile.name || state.user.email}</strong>님 · <strong style="color:var(--gold-light)">${pts.toLocaleString()}P</strong></span>
-          </button>
-          ${isAdmin ? `<a href="admin.html" class="btn-nav btn-gold">회원관리</a>` : ''}
-          <button class="btn-nav btn-outline" onclick="logout()">로그아웃</button>
-          <button class="cart-trigger" onclick="openCart()">
-            🛒 장바구니 <span class="cart-badge">${totalItems}</span>
-          </button>
         `;
-      } else {
-        navEl.innerHTML = `
-          <button class="btn-nav btn-outline" onclick="openAuthModal('login')">로그인</button>
-          <button class="btn-nav btn-gold" onclick="openAuthModal('signup')">회원가입 +3,000P</button>
-          <button class="cart-trigger" onclick="openCart()">
-            🛒 장바구니 <span class="cart-badge">${totalItems}</span>
-          </button>
-        `;
+        return;
       }
 
-      const currentTier = getCurrentUserTier();
-      document.querySelectorAll('.tier-card').forEach(card => {
-        card.classList.toggle('current-tier-highlight', Boolean(state.profile && card.dataset.tier === currentTier.id));
-      });
-    }
+      products = (data || []).map((item, idx) => ({
+        ...item,
+        _img: getProductImage(item, idx),
+        _desc: item.description || `${item.category || '프리미엄'} 컬렉션 · 현재 재고 ${item.stock ?? 0}개`
+      }));
 
-    // Catalog & Products
-    function setCategory(cat) {
-      state.currentCategory = cat;
-      document.querySelectorAll('.filter-tab').forEach(b => {
-        b.classList.toggle('active', b.dataset.cat === cat);
-      });
+      buildCategoryTabs();
       renderProducts();
     }
 
-    function filterAndScroll(cat) {
-      setCategory(cat);
-      document.getElementById('catalog').scrollIntoView({ behavior: 'smooth' });
+    function buildCategoryTabs() {
+      const tabsEl = document.getElementById('filterTabs');
+      const categories = [...new Set(products.map(p => p.category).filter(Boolean))];
+
+      tabsEl.innerHTML = `
+        <button class="filter-tab ${activeCategory === 'all' ? 'active' : ''}" data-cat="all" onclick="setCategory('all', this)">전체 보기</button>
+        ${categories.map(cat => `
+          <button class="filter-tab ${activeCategory === cat ? 'active' : ''}" data-cat="${cat}" onclick="setCategory('${cat}', this)">${cat}</button>
+        `).join('')}
+      `;
     }
 
-    function toggleWish(id, e) {
-      e.stopPropagation();
-      const idx = state.wishlist.indexOf(id);
-      if (idx > -1) {
-        state.wishlist.splice(idx, 1);
-        showToast('관심 상품에서 제외되었습니다.');
-      } else {
-        state.wishlist.push(id);
-        showToast('❤️ 관심 상품에 저장되었습니다.');
-      }
-      saveLocalCartWish();
+    function setCategory(cat, btnEl) {
+      activeCategory = cat;
+      document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
+      if (btnEl) btnEl.classList.add('active');
       renderProducts();
+    }
+
+    function filterAndScroll(keywordOrCat) {
+      const catalogEl = document.getElementById('catalog');
+      catalogEl.scrollIntoView({ behavior: 'smooth' });
+
+      if (keywordOrCat === 'all') {
+        setCategory('all', document.querySelector('.filter-tab[data-cat="all"]'));
+        return;
+      }
+
+      const exactTab = Array.from(document.querySelectorAll('.filter-tab')).find(
+        b => b.dataset.cat.toLowerCase().includes(keywordOrCat.toLowerCase())
+      );
+      if (exactTab) {
+        setCategory(exactTab.dataset.cat, exactTab);
+      } else {
+        setCategory('all', document.querySelector('.filter-tab[data-cat="all"]'));
+      }
+    }
+
+    function getEarnRate() {
+      const grade = currentProfile?.grade || 'WELCOME';
+      return GRADE_RATES[grade] || 0.03;
     }
 
     function renderProducts() {
       const grid = document.getElementById('productGrid');
-      const sort = document.getElementById('sortSelect').value;
       const keyword = (document.getElementById('searchInput')?.value || '').trim().toLowerCase();
-      const tier = getCurrentUserTier();
+      const sort = document.getElementById('sortSelect')?.value || 'default';
+      const rate = getEarnRate();
 
-      let list = PRODUCTS.filter(p => {
-        const matchCat = state.currentCategory === 'all' || p.category === state.currentCategory;
-        const matchKey = !keyword || p.name.toLowerCase().includes(keyword) || p.desc.toLowerCase().includes(keyword);
-        return matchCat && matchKey;
-      });
+      let list = [...products];
+
+      if (activeCategory !== 'all') {
+        list = list.filter(p => p.category === activeCategory);
+      }
+      if (keyword) {
+        list = list.filter(p =>
+          (p.name || '').toLowerCase().includes(keyword) ||
+          (p.category || '').toLowerCase().includes(keyword)
+        );
+      }
+
       if (sort === 'price-asc') list.sort((a, b) => a.price - b.price);
       if (sort === 'price-desc') list.sort((a, b) => b.price - a.price);
 
       if (list.length === 0) {
-        grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:60px 20px; color:var(--text-muted);">검색 조건에 맞는 상품이 없습니다.</div>`;
+        grid.innerHTML = `
+          <div style="grid-column:1/-1; text-align:center; padding:60px 0; color:var(--text-muted);">
+            조건에 맞는 상품이 없습니다.
+          </div>
+        `;
         return;
       }
 
       grid.innerHTML = list.map(p => {
-        const earnPts = Math.floor(p.price * tier.rate);
-        const liked = state.wishlist.includes(p.id);
+        const liked = wishlist.includes(p.id);
+        const earnPts = Math.floor(p.price * rate);
+        const soldOut = Number(p.stock) <= 0;
+
         return `
           <article class="product-card">
-            <div class="product-thumb" onclick="openProductDetail(${p.id})">
-              <img src="${p.img}" alt="${p.name}" onerror="this.src='img/hero-1.jpg'" />
+            <div class="product-thumb" onclick="openDetailModal(${p.id})">
+              <img src="${p._img}" alt="${p.name}" />
               <div class="product-badges">
-                <span class="p-badge best">${p.badge}</span>
-                <span class="p-badge cat">${p.catLabel}</span>
+                ${p.category ? `<span class="p-badge cat">${p.category}</span>` : ''}
+                ${soldOut ? `<span class="p-badge" style="background:#EF4444;color:#fff;">품절</span>` : `<span class="p-badge best">재고 ${p.stock}개</span>`}
               </div>
-              <button class="wish-btn ${liked ? 'liked' : ''}" onclick="toggleWish(${p.id}, event)" title="찜하기">${liked ? '♥' : '♡'}</button>
+              <button class="wish-btn ${liked ? 'liked' : ''}" onclick="event.stopPropagation(); toggleWish(${p.id})">
+                ${liked ? '♥' : '♡'}
+              </button>
             </div>
             <div class="product-info">
-              <h3 class="product-title" onclick="openProductDetail(${p.id})">${p.name}</h3>
-              <p class="product-desc">${p.desc}</p>
+              <h3 class="product-title" onclick="openDetailModal(${p.id})">${p.name}</h3>
+              <p class="product-desc">${p._desc}</p>
               <div class="product-meta">
                 <div class="price-box">
-                  <span class="price-orig">${formatWon(p.origPrice)}</span>
-                  <span class="price-now">${formatWon(p.price)}</span>
+                  <span class="price-now">${formatPrice(p.price)}</span>
                 </div>
-                <span class="point-preview">+${earnPts.toLocaleString()}P (${Math.round(tier.rate * 100)}%)</span>
+                <span class="point-preview">+${earnPts.toLocaleString()}P 적립</span>
               </div>
               <div class="product-actions">
-                <button class="btn-card btn-outline" onclick="addToCart(${p.id})">장바구니 담기</button>
-                <button class="btn-card btn-royal" onclick="buyNow(${p.id})">바로 결제</button>
+                <button class="btn-card btn-outline" onclick="addToCart(${p.id})" ${soldOut ? 'disabled' : ''}>장바구니</button>
+                <button class="btn-card btn-royal" onclick="buyNow(${p.id})" ${soldOut ? 'disabled' : ''}>바로구매</button>
               </div>
             </div>
           </article>
@@ -1899,396 +1835,379 @@
       }).join('');
     }
 
-    function openProductDetail(id) {
-      const p = PRODUCTS.find(x => x.id === id);
-      if (!p) return;
-      const tier = getCurrentUserTier();
-      const earnPts = Math.floor(p.price * tier.rate);
+    function toggleWish(productId) {
+      if (wishlist.includes(productId)) {
+        wishlist = wishlist.filter(id => id !== productId);
+        showToast('관심 상품에서 제외되었습니다.');
+      } else {
+        wishlist.push(productId);
+        showToast('❤️ 관심 상품에 추가되었습니다.');
+      }
+      localStorage.setItem('royalpaw_wish', JSON.stringify(wishlist));
+      renderProducts();
+    }
 
-      document.getElementById('productModalContent').innerHTML = `
-        <div class="modal-head">
-          <h3>${p.catLabel} 상세 정보</h3>
-          <button class="close-btn" onclick="closeModal('productModal')">✕</button>
-        </div>
-        <div style="display:grid; grid-template-columns: 1fr 1.1fr; gap:22px; align-items:center;">
-          <img src="${p.img}" alt="${p.name}" onerror="this.src='img/hero-1.jpg'" style="border-radius:14px; border:1px solid var(--border-subtle);" />
+    function openDetailModal(productId) {
+      const p = products.find(item => item.id === productId);
+      if (!p) return;
+      document.getElementById('detailTitle').textContent = p.name;
+      document.getElementById('detailBody').innerHTML = `
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; align-items:center;">
+          <img src="${p._img}" alt="${p.name}" style="border-radius:14px; aspect-ratio:1/1; object-fit:cover;" />
           <div>
-            <span class="p-badge best" style="display:inline-block; margin-bottom:10px;">${p.badge}</span>
-            <h2 style="font-size:1.35rem; margin-bottom:10px;">${p.name}</h2>
-            <p style="font-size:0.9rem; color:var(--text-sub); margin-bottom:16px;">${p.detail}</p>
-            <div style="padding:12px; background:var(--bg-dark); border-radius:10px; margin-bottom:16px;">
-              <div style="font-size:0.8rem; color:var(--text-muted); text-decoration:line-through;">정가 ${formatWon(p.origPrice)}</div>
-              <div style="font-size:1.4rem; font-weight:800; color:#fff;">${formatWon(p.price)}</div>
-              <div style="font-size:0.82rem; color:var(--gold-light); margin-top:4px;">
-                ${tier.icon} ${tier.name} 등급 기준 <strong>+${earnPts.toLocaleString()}P</strong> 적립
-              </div>
-            </div>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-              <button class="btn-nav btn-outline" onclick="addToCart(${p.id}); closeModal('productModal');">장바구니 담기</button>
-              <button class="btn-nav btn-gold" onclick="closeModal('productModal'); buyNow(${p.id});">바로 결제하기</button>
+            <span class="curation-badge">${p.category || 'ROYAL COLLECTION'}</span>
+            <h4 style="font-size:1.25rem; margin-bottom:10px;">${p.name}</h4>
+            <p style="font-size:0.88rem; color:var(--text-sub); margin-bottom:16px;">${p._desc}</p>
+            <div style="font-size:1.35rem; font-weight:800; color:var(--gold-light); margin-bottom:6px;">${formatPrice(p.price)}</div>
+            <div style="font-size:0.82rem; color:var(--text-muted); margin-bottom:20px;">남은 재고: ${p.stock}개 · 예상 적립 +${Math.floor(p.price * getEarnRate()).toLocaleString()}P</div>
+            <div style="display:flex; gap:8px;">
+              <button class="btn-nav btn-outline" style="flex:1;" onclick="addToCart(${p.id}); closeModal('detailModal');">장바구니</button>
+              <button class="btn-nav btn-gold" style="flex:1;" onclick="closeModal('detailModal'); buyNow(${p.id});">바로구매</button>
             </div>
           </div>
         </div>
       `;
-      document.getElementById('productModal').classList.add('open');
+      document.getElementById('detailModal').classList.add('open');
     }
 
-    // Cart & Checkout
-    function addToCart(productId) {
-      const prod = PRODUCTS.find(p => p.id === productId);
-      if (!prod) return;
-      const existing = state.cart.find(i => i.id === productId);
-      if (existing) existing.qty += 1;
-      else state.cart.push({ id: productId, qty: 1 });
-      saveLocalCartWish();
-      refreshAll();
-      showToast(`🛒 '${prod.name}' 상품이 장바구니에 담겼습니다.`);
+    // =========================================================
+    // 6. 장바구니 & 주문/결제 (shop_orders, shop_order_items)
+    // =========================================================
+    function saveCart() {
+      localStorage.setItem('royalpaw_cart', JSON.stringify(cart));
+      renderNavActions();
+      updateCartUI();
+    }
+
+    function addToCart(productId, openDrawer = true) {
+      const p = products.find(item => item.id === productId);
+      if (!p) return;
+      if (Number(p.stock) <= 0) {
+        showToast('품절된 상품입니다.');
+        return;
+      }
+
+      const existing = cart.find(item => item.id === productId);
+      if (existing) {
+        if (existing.qty + 1 > p.stock) {
+          showToast(`최대 주문 가능 재고(${p.stock}개)를 초과할 수 없습니다.`);
+          return;
+        }
+        existing.qty += 1;
+      } else {
+        cart.push({
+          id: p.id,
+          name: p.name,
+          price: p.price,
+          img: p._img,
+          qty: 1
+        });
+      }
+
+      saveCart();
+      showToast(`🛍️ [${p.name}] 상품이 쇼핑백에 담겼습니다.`);
+      if (openDrawer) openCart();
+    }
+
+    function addFirstByCategory(keyword) {
+      const found = products.find(p =>
+        (p.category || '').toLowerCase().includes(keyword) ||
+        (p.name || '').toLowerCase().includes(keyword)
+      ) || products[0];
+      if (found) addToCart(found.id);
     }
 
     function buyNow(productId) {
-      const existing = state.cart.find(i => i.id === productId);
-      if (!existing) {
-        state.cart.push({ id: productId, qty: 1 });
-        saveLocalCartWish();
-        refreshAll();
-      }
-      openCheckout();
+      addToCart(productId, false);
+      openCheckoutModal();
     }
 
-    function updateQty(productId, delta) {
-      const idx = state.cart.findIndex(i => i.id === productId);
-      if (idx === -1) return;
-      state.cart[idx].qty += delta;
-      if (state.cart[idx].qty <= 0) state.cart.splice(idx, 1);
-      saveLocalCartWish();
-      refreshAll();
-    }
+    function changeCartQty(productId, delta) {
+      const item = cart.find(c => c.id === productId);
+      const prod = products.find(p => p.id === productId);
+      if (!item) return;
 
-    function calcCartMetrics() {
-      const tier = getCurrentUserTier();
-      let subtotal = 0;
-      state.cart.forEach(item => {
-        const p = PRODUCTS.find(x => x.id === item.id);
-        if (p) subtotal += p.price * item.qty;
-      });
-      const shipping = subtotal === 0 ? 0 : (subtotal >= tier.freeShipMin ? 0 : 3000);
-      const earnPoints = Math.floor(subtotal * tier.rate);
-      return { subtotal, shipping, total: subtotal + shipping, earnPoints, tier };
-    }
-
-    function renderCart() {
-      const itemsEl = document.getElementById('cartItems');
-      const shipBarEl = document.getElementById('shippingBar');
-      const { subtotal, shipping, total, earnPoints, tier } = calcCartMetrics();
-
-      if (tier.freeShipMin === 0) {
-        shipBarEl.innerHTML = `👑 <strong>${tier.name}</strong> 등급 혜택으로 전 상품 <strong>무료배송</strong>이 적용됩니다!
-          <div class="ship-track"><div class="ship-fill" style="width:100%"></div></div>`;
+      const nextQty = item.qty + delta;
+      if (nextQty <= 0) {
+        cart = cart.filter(c => c.id !== productId);
+      } else if (prod && nextQty > prod.stock) {
+        showToast(`재고가 ${prod.stock}개 남아 있습니다.`);
+        return;
       } else {
-        const remain = Math.max(0, tier.freeShipMin - subtotal);
-        const pct = Math.min(100, (subtotal / tier.freeShipMin) * 100);
-        shipBarEl.innerHTML = remain === 0
-          ? `🎉 <strong>무료배송</strong> 조건을 달성했습니다!`
-          : `<strong>${formatWon(remain)}</strong> 더 담으시면 무료배송! (${tier.name} 기준 ${formatWon(tier.freeShipMin)})`
-          + `<div class="ship-track"><div class="ship-fill" style="width:${pct}%"></div></div>`;
+        item.qty = nextQty;
       }
+      saveCart();
+    }
 
-      if (state.cart.length === 0) {
-        itemsEl.innerHTML = `
-          <div style="text-align:center; padding:60px 20px; color:var(--text-muted);">
-            <div style="font-size:2.6rem; margin-bottom:12px;">🐾</div>
-            <p>장바구니가 비어 있습니다.<br>우리 고양이를 위한 캣타워와 간식을 담아보세요!</p>
-          </div>
-        `;
-      } else {
-        itemsEl.innerHTML = state.cart.map(item => {
-          const p = PRODUCTS.find(x => x.id === item.id) || FALLBACK_PRODUCTS[0];
-          return `
-            <div class="cart-item">
-              <img src="${p.img}" alt="${p.name}" onerror="this.src='img/hero-1.jpg'" />
-              <div class="cart-item-body">
-                <div style="display:flex; justify-content:space-between; gap:8px;">
-                  <strong style="font-size:0.88rem;">${p.name}</strong>
-                  <button onclick="updateQty(${p.id}, -999)" style="color:var(--text-muted); font-size:0.85rem;">✕</button>
-                </div>
-                <div style="display:flex; align-items:center; justify-content:space-between; margin-top:8px;">
-                  <div class="qty-controls">
-                    <button onclick="updateQty(${p.id}, -1)">−</button>
-                    <span style="font-size:0.84rem; font-weight:700;">${item.qty}</span>
-                    <button onclick="updateQty(${p.id}, 1)">+</button>
-                  </div>
-                  <strong style="font-size:0.95rem; color:var(--gold-light);">${formatWon(p.price * item.qty)}</strong>
-                </div>
-              </div>
-            </div>
-          `;
-        }).join('');
-      }
+    function removeCartItem(productId) {
+      cart = cart.filter(c => c.id !== productId);
+      saveCart();
+    }
 
-      document.getElementById('cartSubtotal').textContent = formatWon(subtotal);
-      document.getElementById('cartShipping').textContent = shipping === 0 ? '무료' : formatWon(shipping);
-      document.getElementById('cartTierRate').textContent = `${tier.name} ${Math.round(tier.rate * 100)}%`;
+    function calcCartTotals() {
+      const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+      const grade = currentProfile?.grade || 'WELCOME';
+      const isFreeTier = grade === 'GOLD' || grade === 'VIP';
+      const shipping = subtotal === 0 || isFreeTier || subtotal >= 50000 ? 0 : 3000;
+      const earnPoints = Math.floor(subtotal * getEarnRate());
+      return { subtotal, shipping, earnPoints, total: subtotal + shipping };
+    }
+
+    function updateCartUI() {
+      const { subtotal, shipping, earnPoints, total } = calcCartTotals();
+      const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+
+      document.getElementById('drawerCount').textContent = totalQty;
+      document.getElementById('cartSubtotal').textContent = formatPrice(subtotal);
+      document.getElementById('cartShipping').textContent = shipping === 0 ? '무료' : formatPrice(shipping);
       document.getElementById('cartEarnPoints').textContent = `+${earnPoints.toLocaleString()}P`;
-      document.getElementById('cartTotal').textContent = formatWon(total);
+      document.getElementById('cartTotal').textContent = formatPrice(total);
+
+      const shipBar = document.getElementById('shippingBar');
+      const freeLimit = 50000;
+      const pct = Math.min(100, Math.round((subtotal / freeLimit) * 100));
+      const remain = Math.max(0, freeLimit - subtotal);
+      shipBar.innerHTML = `
+        <div>${shipping === 0 && subtotal > 0 ? '🎉 <strong>무료배송</strong> 혜택이 적용되었습니다!' : `<strong>${formatPrice(remain)}</strong> 더 담으면 무료배송`}</div>
+        <div class="ship-track"><div class="ship-fill" style="width:${pct}%"></div></div>
+      `;
+
+      const itemsEl = document.getElementById('cartItems');
+      if (cart.length === 0) {
+        itemsEl.innerHTML = `<div style="text-align:center; padding:60px 0; color:var(--text-muted);">쇼핑백이 비어 있습니다.</div>`;
+        return;
+      }
+
+      itemsEl.innerHTML = cart.map(item => `
+        <div class="cart-item">
+          <img src="${item.img}" alt="${item.name}" />
+          <div class="cart-item-body">
+            <div style="display:flex; justify-content:space-between; gap:8px;">
+              <strong style="font-size:0.9rem;">${item.name}</strong>
+              <button onclick="removeCartItem(${item.id})" style="color:var(--text-muted); font-size:0.85rem;">✕</button>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
+              <div class="qty-controls">
+                <button onclick="changeCartQty(${item.id}, -1)">-</button>
+                <span style="font-size:0.85rem; font-weight:700;">${item.qty}</span>
+                <button onclick="changeCartQty(${item.id}, 1)">+</button>
+              </div>
+              <strong style="color:var(--gold-light);">${formatPrice(item.price * item.qty)}</strong>
+            </div>
+          </div>
+        </div>
+      `).join('');
     }
 
     function openCart() {
-      renderCart();
-      document.getElementById('drawerBackdrop').classList.add('open');
+      document.getElementById('cartBackdrop').classList.add('open');
       document.getElementById('cartDrawer').classList.add('open');
     }
 
     function closeCart() {
-      document.getElementById('drawerBackdrop').classList.remove('open');
+      document.getElementById('cartBackdrop').classList.remove('open');
       document.getElementById('cartDrawer').classList.remove('open');
     }
 
-    function openCheckout() {
-      if (state.cart.length === 0) {
+    function openCheckoutModal() {
+      if (cart.length === 0) {
         showToast('장바구니에 상품을 먼저 담아주세요.');
         return;
       }
+      if (!currentUser) {
+        closeCart();
+        showToast('주문 및 포인트 적립을 위해 먼저 로그인해주세요.');
+        openAuthModal('login');
+        return;
+      }
+
       closeCart();
+      document.getElementById('orderReceiver').value = currentProfile?.name || '';
+      document.getElementById('orderPhone').value = currentProfile?.phone || '';
+      document.getElementById('availPointsText').textContent = `${Number(currentProfile?.points || 0).toLocaleString()}P`;
+      document.getElementById('usePointsInput').value = 0;
+      document.getElementById('usePointsInput').max = currentProfile?.points || 0;
 
-      const { total, tier } = calcCartMetrics();
-      const userPts = Number(state.profile?.points || 0);
-      document.getElementById('orderReceiver').value = state.profile?.name || state.user?.email || '고객';
-      if (state.profile?.phone) {
-        document.getElementById('orderPhone').value = state.profile.phone;
-      }
-
-      const pointSec = document.getElementById('checkoutPointSection');
-      if (state.user) {
-        pointSec.innerHTML = `
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-            <span style="font-size:0.85rem; font-weight:700; color:var(--gold-light);">
-              ${tier.icon} ${state.profile?.name || '회원'}님 보유 포인트 (${tier.name} · ${Math.round(tier.rate * 100)}% 적립)
-            </span>
-            <strong style="font-size:0.95rem;">${userPts.toLocaleString()}P</strong>
-          </div>
-          <div style="display:flex; gap:8px;">
-            <input type="number" id="usePointInput" class="form-input" min="0" max="${Math.min(userPts, total)}" value="0" oninput="updateCheckoutTotals()" />
-            <button type="button" class="btn-nav btn-outline" style="white-space:nowrap;" onclick="useAllPoints()">전액 사용</button>
-          </div>
-        `;
-      } else {
-        pointSec.innerHTML = `
-          <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
-            <span style="font-size:0.84rem; color:var(--text-sub);">로그인/회원가입 후 주문하시면 <strong>shop_orders</strong>에 주문 내역이 저장됩니다.</span>
-            <button type="button" class="btn-nav btn-gold" style="white-space:nowrap;" onclick="closeModal('checkoutModal'); openAuthModal('login');">로그인하기</button>
-          </div>
-        `;
-      }
-
-      updateCheckoutTotals();
+      updateCheckoutSummary();
       document.getElementById('checkoutModal').classList.add('open');
     }
 
-    function useAllPoints() {
-      if (!state.user || !state.profile) return;
-      const { total } = calcCartMetrics();
-      const userPts = Number(state.profile.points || 0);
-      const input = document.getElementById('usePointInput');
-      if (input) {
-        input.value = Math.min(userPts, total);
-        updateCheckoutTotals();
-      }
-    }
-
-    function updateCheckoutTotals() {
-      const { subtotal, shipping, total, tier } = calcCartMetrics();
-      let usedPts = 0;
-      const input = document.getElementById('usePointInput');
-      if (input && state.user && state.profile) {
-        const userPts = Number(state.profile.points || 0);
-        usedPts = Math.max(0, Math.min(Number(input.value) || 0, userPts, total));
-        input.value = usedPts;
-      }
-      const finalPay = total - usedPts;
-      const earnPts = Math.floor(Math.max(0, subtotal - usedPts) * tier.rate);
-
-      document.getElementById('paySub').textContent = formatWon(subtotal);
-      document.getElementById('payShip').textContent = shipping === 0 ? '무료' : formatWon(shipping);
-      document.getElementById('payPointDisc').textContent = `-${usedPts.toLocaleString()}원`;
-      document.getElementById('payEarn').textContent = `+${earnPts.toLocaleString()}P`;
-      document.getElementById('payFinal').textContent = formatWon(finalPay);
-      document.getElementById('paySubmitBtn').textContent = `${formatWon(finalPay)} 결제 승인하기`;
-    }
-
     function selectPayMethod(btn, method) {
-      state.selectedPayMethod = method;
+      selectedPayMethod = method;
       document.querySelectorAll('.pay-method-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
     }
 
-    async function processPayment(e) {
-      e.preventDefault();
-      if (!state.user) {
-        closeModal('checkoutModal');
-        openAuthModal('login');
-        showToast('먼저 로그인해 주세요!');
+    function useAllPoints() {
+      const { subtotal, shipping } = calcCartTotals();
+      const maxAvail = Number(currentProfile?.points || 0);
+      const maxPayable = subtotal + shipping;
+      document.getElementById('usePointsInput').value = Math.min(maxAvail, maxPayable);
+      updateCheckoutSummary();
+    }
+
+    function updateCheckoutSummary() {
+      const { subtotal, shipping } = calcCartTotals();
+      const maxAvail = Number(currentProfile?.points || 0);
+      let usePts = parseInt(document.getElementById('usePointsInput').value || '0', 10);
+      if (isNaN(usePts) || usePts < 0) usePts = 0;
+      if (usePts > maxAvail) usePts = maxAvail;
+      if (usePts > subtotal + shipping) usePts = subtotal + shipping;
+      document.getElementById('usePointsInput').value = usePts;
+
+      const finalAmount = subtotal + shipping - usePts;
+      const earnPts = Math.floor(Math.max(0, subtotal - usePts) * getEarnRate());
+
+      document.getElementById('chkSub').textContent = formatPrice(subtotal);
+      document.getElementById('chkShip').textContent = shipping === 0 ? '무료' : formatPrice(shipping);
+      document.getElementById('chkPointUse').textContent = `-${usePts.toLocaleString()}원`;
+      document.getElementById('chkPointEarn').textContent = `+${earnPts.toLocaleString()}P`;
+      document.getElementById('chkFinal').textContent = formatPrice(finalAmount);
+    }
+
+    async function submitOrder() {
+      if (!currentUser) return;
+
+      const receiver = document.getElementById('orderReceiver').value.trim();
+      const phone = document.getElementById('orderPhone').value.trim();
+      const address = document.getElementById('orderAddress').value.trim();
+
+      if (!receiver || !phone || !address) {
+        showToast('수령인 성함, 연락처, 배송지 주소를 모두 입력해주세요.');
         return;
       }
 
-      const btn = document.getElementById('paySubmitBtn');
+      const btn = document.getElementById('submitOrderBtn');
       btn.disabled = true;
-      btn.textContent = '⏳ 주문 저장 중...';
+      btn.textContent = '주문 처리 중...';
 
       try {
-        const { subtotal, total, tier } = calcCartMetrics();
-        const userPts = Number(state.profile?.points || 0);
-        const input = document.getElementById('usePointInput');
-        const usedPts = input ? Math.max(0, Math.min(Number(input.value) || 0, userPts, total)) : 0;
-        const finalPay = total - usedPts;
-        const earnPts = Math.floor(Math.max(0, subtotal - usedPts) * tier.rate);
+        const { subtotal, shipping } = calcCartTotals();
+        const usePts = parseInt(document.getElementById('usePointsInput').value || '0', 10) || 0;
+        const finalTotal = subtotal + shipping - usePts;
+        const earnPts = Math.floor(Math.max(0, subtotal - usePts) * getEarnRate());
 
-        const receiver = document.getElementById('orderReceiver').value.trim();
-        const phone = document.getElementById('orderPhone').value.trim();
-        const address = document.getElementById('orderAddress').value.trim();
-
-        const { data: orderRow, error: orderErr } = await db
+        // 1) shop_orders 테이블에 주문 1건 저장
+        const { data: orderData, error: orderError } = await db
           .from('shop_orders')
           .insert({
-            user_id: state.user.id,
-            total: finalPay,
-            used_points: usedPts,
-            earned_points: earnPts,
-            status: 'PAID',
-            receiver_name: receiver,
-            phone,
-            address,
-            pay_method: state.selectedPayMethod
+            user_id: currentUser.id,
+            total: finalTotal,
+            status: '결제완료'
           })
           .select()
           .single();
 
-        if (orderErr) {
-          throw new Error(orderErr.message);
-        }
+        if (orderError) throw orderError;
 
-        if (orderRow?.id) {
-          const orderItemsPayload = state.cart.map(item => {
-            const p = PRODUCTS.find(x => x.id === item.id) || FALLBACK_PRODUCTS[0];
-            return {
-              order_id: orderRow.id,
-              product_id: p.id,
-              product_name: p.name,
-              qty: item.qty,
-              unit_price: p.price
-            };
-          });
-          const { error: itemsErr } = await db.from('shop_order_items').insert(orderItemsPayload);
-          if (itemsErr) {
-            console.warn('shop_order_items 저장 안내:', itemsErr.message);
-          }
-        }
+        // 2) shop_order_items 테이블에 주문 상세 품목들 저장
+        const orderItemsPayload = cart.map(item => ({
+          order_id: orderData.id,
+          product_id: item.id,
+          quantity: item.qty,
+          price: item.price
+        }));
 
-        const nextPoints = Math.max(0, userPts - usedPts + earnPts);
+        const { error: itemsError } = await db
+          .from('shop_order_items')
+          .insert(orderItemsPayload);
+
+        if (itemsError) throw itemsError;
+
+        // 3) 포인트 차감 및 적립 반영 (shop_profiles 업데이트 시도)
+        const nextPoints = Math.max(0, Number(currentProfile?.points || 0) - usePts + earnPts);
         await db
           .from('shop_profiles')
           .update({ points: nextPoints })
-          .eq('id', state.user.id);
+          .eq('id', currentUser.id);
 
-        state.cart = [];
-        saveLocalCartWish();
-        await loadUserProfileAndOrders(state.user);
-        refreshAll();
+        await fetchUserProfile();
+        renderNavActions();
+
+        // 4) 장바구니 비우기 및 상품 목록 새로고침
+        cart = [];
+        saveCart();
+        await loadProducts();
+
         closeModal('checkoutModal');
-        showToast(`✅ 주문 완료! (${formatWon(finalPay)} / +${earnPts.toLocaleString()}P 적립)`);
+        showToast(`🎉 주문이 완료되었습니다! (주문번호 #${orderData.id})`);
       } catch (err) {
-        showToast('❌ 주문 처리 오류: ' + err.message);
+        showToast('주문 저장 중 오류 발생: ' + err.message);
       } finally {
         btn.disabled = false;
-        btn.textContent = '결제하기';
+        btn.textContent = '결제 완료하기';
       }
     }
 
-    function openMyPage() {
-      if (!state.user || !state.profile) {
-        openAuthModal('login');
-        return;
-      }
-      const tier = getCurrentUserTier();
-      const pts = Number(state.profile.points || 0);
+    // =========================================================
+    // 7. 마이페이지 (내 정보 & 내 주문 내역 조회)
+    // =========================================================
+    async function openMyPage() {
+      if (!currentUser || !currentProfile) return;
 
-      document.getElementById('mypageContent').innerHTML = `
-        <div class="modal-head">
-          <h3>👑 로열 멤버십 &amp; 주문 내역</h3>
-          <button class="close-btn" onclick="closeModal('mypageModal')">✕</button>
-        </div>
+      const body = document.getElementById('myPageBody');
+      body.innerHTML = `<div style="text-align:center; padding:30px; color:var(--text-muted);">주문 내역을 불러오는 중...</div>`;
+      document.getElementById('myPageModal').classList.add('open');
 
-        <div style="background:linear-gradient(135deg, var(--royal-blue), #0F234A); border:1px solid var(--border-gold); border-radius:16px; padding:20px; margin-bottom:20px;">
-          <div style="display:flex; justify-content:space-between; align-items:center;">
+      const { data: orders, error } = await db
+        .from('shop_orders')
+        .select('*, shop_order_items(*, shop_products(name))')
+        .eq('user_id', currentUser.id)
+        .order('id', { ascending: false });
+
+      const orderListHtml = error
+        ? `<p style="color:var(--coral);">주문 내역을 불러오지 못했습니다: ${error.message}</p>`
+        : !orders || orders.length === 0
+          ? `<p style="color:var(--text-muted); text-align:center; padding:24px 0;">아직 주문 내역이 없습니다.</p>`
+          : orders.map(o => {
+              const itemsText = (o.shop_order_items || [])
+                .map(it => `${it.shop_products?.name || '상품 #' + it.product_id} × ${it.quantity}개`)
+                .join(', ');
+              return `
+                <div style="background:var(--bg-dark); border:1px solid var(--border-subtle); border-radius:12px; padding:14px; margin-bottom:10px;">
+                  <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+                    <strong>주문번호 #${o.id}</strong>
+                    <span class="p-badge best">${o.status || '결제완료'}</span>
+                  </div>
+                  <div style="font-size:0.84rem; color:var(--text-sub); margin-bottom:6px;">${itemsText || '주문 상세 품목'}</div>
+                  <div style="display:flex; justify-content:space-between; font-size:0.82rem; color:var(--text-muted);">
+                    <span>${o.created_at ? new Date(o.created_at).toLocaleString('ko-KR') : ''}</span>
+                    <strong style="color:var(--gold-light); font-size:0.95rem;">${formatPrice(o.total)}</strong>
+                  </div>
+                </div>
+              `;
+            }).join('');
+
+      body.innerHTML = `
+        <div style="background:var(--bg-card); border:1px solid var(--border-gold); border-radius:14px; padding:18px; margin-bottom:20px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
             <div>
-              <span class="tier-dot">${tier.icon} ${tier.name} (${state.profile.grade || 'WELCOME'})</span>
-              <h2 style="font-size:1.35rem; margin-top:8px;">${state.profile.name || '회원'}님</h2>
-              <div style="font-size:0.8rem; color:var(--text-sub);">${state.profile.email || state.user.email}</div>
+              <span class="tier-dot">${currentProfile.grade}</span>
+              <strong style="font-size:1.1rem; margin-left:6px;">${currentProfile.name}님</strong>
+              <div style="font-size:0.83rem; color:var(--text-muted); margin-top:4px;">${currentProfile.email} · ${currentProfile.phone || '연락처 미등록'}</div>
             </div>
             <div style="text-align:right;">
-              <div style="font-size:0.78rem; color:var(--text-sub);">보유 포인트</div>
-              <div style="font-size:1.65rem; font-weight:800; color:var(--gold-light);">${pts.toLocaleString()}P</div>
+              <div style="font-size:0.78rem; color:var(--text-sub);">보유 로열 포인트</div>
+              <div style="font-size:1.35rem; font-weight:800; color:var(--gold-light);">${Number(currentProfile.points || 0).toLocaleString()}P</div>
             </div>
           </div>
         </div>
-
-        <h4 style="font-size:0.95rem; margin-bottom:10px;">📦 내 주문 내역 (shop_orders)</h4>
-        <div style="max-height:220px; overflow-y:auto; display:flex; flex-direction:column; gap:8px;">
-          ${(state.orders && state.orders.length > 0)
-            ? state.orders.map(o => `
-                <div style="display:flex; justify-content:space-between; padding:12px 14px; background:var(--bg-dark); border-radius:10px; font-size:0.84rem;">
-                  <div>
-                    <strong>주문 #${o.id}</strong> · <span style="color:var(--cyan);">${o.status || 'PAID'}</span>
-                    <div style="font-size:0.75rem; color:var(--text-muted);">${o.created_at ? new Date(o.created_at).toLocaleString('ko-KR') : ''}</div>
-                  </div>
-                  <div style="text-align:right;">
-                    <strong>${formatWon(o.total)}</strong>
-                  </div>
-                </div>
-              `).join('')
-            : `<div style="font-size:0.84rem; color:var(--text-muted); padding:14px; background:var(--bg-dark); border-radius:10px;">아직 주문 내역이 없습니다.</div>`
-          }
-        </div>
+        <h4 style="margin-bottom:12px; font-size:0.98rem;">📦 최근 주문 내역</h4>
+        ${orderListHtml}
       `;
-      document.getElementById('mypageModal').classList.add('open');
     }
 
-    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-
-    function showToast(msg) {
-      const container = document.getElementById('toastContainer');
-      const el = document.createElement('div');
-      el.className = 'toast';
-      el.textContent = msg;
-      container.appendChild(el);
-      setTimeout(() => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(10px)';
-        el.style.transition = 'all 0.25s ease';
-        setTimeout(() => el.remove(), 260);
-      }, 3400);
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('open');
     }
 
-    function refreshAll() {
-      renderNav();
-      renderProducts();
-      renderCart();
-    }
-
-    db.auth.onAuthStateChange(async (_event, session) => {
-      state.user = session?.user || null;
-      if (state.user) {
-        await loadUserProfileAndOrders(state.user);
-      } else {
-        state.profile = null;
-        state.orders = [];
-      }
-      refreshAll();
-    });
-
-    document.addEventListener('DOMContentLoaded', async () => {
-      initHeroSlider();
-      await loadProductsFromSupabase();
-      await syncAuthState();
+    // =========================================================
+    // 8. 초기 실행
+    // =========================================================
+    window.addEventListener('DOMContentLoaded', async () => {
+      initHero();
+      await initAuth();
+      await loadProducts();
     });
   </script>
 </body>
